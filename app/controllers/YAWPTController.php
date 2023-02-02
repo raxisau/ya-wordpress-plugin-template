@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 final class YAWPTController extends \Jackbooted\Util\JB {
+    const SLUG = 'yawpt';
+    
     private static $instance = null;
     private static $allModels = [
         '\App\Models\MutexDAO',
@@ -91,6 +93,7 @@ final class YAWPTController extends \Jackbooted\Util\JB {
         $plugin = \Jackbooted\Forms\Request::get( 'plugin' );
         check_admin_referer( "activate-plugin_{$plugin}" );
 
+        // This is for setting up all database tables
         foreach ( self::$allModels as $modelClassName ) {
             $model = new $modelClassName();
             \Jackbooted\DB\DB::exec( $model->db, $model->tableStructure );
@@ -124,29 +127,15 @@ final class YAWPTController extends \Jackbooted\Util\JB {
     }
 
     public function shortCodeInit() {
-        add_shortcode( 'dhu-countdown', [ $this, 'shortCodeCountdown' ] );
-        add_shortcode( 'dhu-unsub',     [ $this, 'shortCodeUnsub' ] );
-        add_shortcode( 'dhu-signup',    [ $this, 'shortCodeSignup' ] );
-        add_shortcode( 'dhu-partials',  [ $this, 'shortPartialEdit' ] );
+        add_shortcode( self::SLUG . '-partials',  [ $this, 'shortPartialEdit' ] );
     }
 
     public function shortPartialEdit( $atts = [], $content = null, $tag = '' ) {
         return $this->shortCodeGeneric( \App\Controllers\PartialEditController::class, $atts, $content, $tag );
     }
 
-    public function shortCodeUnsub( $atts = [], $content = null, $tag = '' ) {
-        return $this->shortCodeGeneric( \App\Controllers\UnsubController::class, $atts, $content, $tag );
-    }
-
-    public function shortCodeSignup( $atts = [], $content = null, $tag = '' ) {
-        return $this->shortCodeGeneric( \App\Controllers\SignupController::class, $atts, $content, $tag );
-    }
-
-    public function shortCodeCountdown( $atts = [], $content = null, $tag = '' ) {
-        return $this->shortCodeGeneric( \App\Controllers\CountdownController::class, $atts, $content, $tag );
-    }
-
     public function shortCodeGeneric( $clazz, $atts, $content, $tag ) {
+        // Put the shortcode variables in the Request structure so can be retreived in the programs
         \Jackbooted\Forms\Request::set( 'inject_atts'   , $atts );
         \Jackbooted\Forms\Request::set( 'inject_content', $content );
         \Jackbooted\Forms\Request::set( 'inject_tag'    , $tag );
@@ -177,7 +166,7 @@ final class YAWPTController extends \Jackbooted\Util\JB {
             'Content-Type: text/html; charset=UTF-8',
         ];
 
-        $fullEmail = \App\Models\MailData::$emailHeader . $body . \App\Models\MailData::$emailFooter;
+        $fullEmail = MailData::$emailHeader . $body . MailData::$emailFooter;
 
         $htmlFunc = [ __CLASS__, 'wpMailHtml' ];
         add_filter(    'wp_mail_content_type', $htmlFunc );

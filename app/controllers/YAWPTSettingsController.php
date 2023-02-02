@@ -23,7 +23,7 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
     private $pageName       = self::SLUG . '-admin';
 
     // https://developer.wordpress.org/resource/dashicons
-    private $helpIcon       = 'dashicons-awards';
+    private $helpIcon       = 'dashicons-media-document';
 
     private $menuList = [];
 
@@ -138,7 +138,7 @@ HTML;
         }
         
         foreach ( $this->checkfields as $key ) {
-            $sanitary_values[$key] = ( isset( $input[$key] ) &&  $input[$key] = 'YES' ) ? 'YES' : 'NO';
+            $sanitary_values[$key] = ( isset( $input[$key] ) &&  $input[$key] == 'YES' ) ? 'YES' : 'NO';
         }
 
         return $sanitary_values;

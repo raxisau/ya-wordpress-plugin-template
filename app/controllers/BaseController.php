@@ -20,7 +20,7 @@ class BaseController extends \Jackbooted\Html\WebPage {
     public function __construct () {
         parent::__construct();
 
-        if ( ! DHU_PRODREADY ) {
+        if ( ! YAWPT_PRODREADY ) {
             \App\App::debug();
             $this->debugMode = true;
         }
@@ -38,8 +38,8 @@ class BaseController extends \Jackbooted\Html\WebPage {
             $this->isLoggedIn = true;
         }
 
-        $this->settings   = DHUController::instance()->settings;
-        $this->partialDir = DHU_PARTIALS;
+        $this->settings   = YAWPTController::instance()->settings;
+        $this->partialDir = YAWPT_PARTIALS;
     }
 
     // Facade create a response object

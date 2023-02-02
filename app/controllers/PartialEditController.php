@@ -117,7 +117,7 @@ class PartialEditController extends BaseController {
 
     private function getPartialList() {
         $handle = opendir( $this->partialDir );
-        $partialList = [ ];
+        $partialList = [ 'ErrMsg.php' ];
         while ( false !== ( $file = readdir( $handle ) ) ) {
             if ( strpos( $file, '.html' ) !== false ) {
                 $partialList[] = $file;
