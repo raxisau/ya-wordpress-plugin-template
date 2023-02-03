@@ -1,6 +1,6 @@
 # Yet Another Wordpress Plugin Template (ya-wordpress-plugin-template) or (YAWPT)
 
-Version 0.0.1 (Please note I have just thrown this together, so it is untested. Please wait for Version 1.0.0)
+Version 0.0.8 (Please note I have just thrown this together, so it is untested. Please wait for Version 1.0.0)
 
 I used to hate WordPress but I have found a way that I can deliver value through WordPress Plugin ShortCodes.
 
