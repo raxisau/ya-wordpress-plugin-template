@@ -128,10 +128,15 @@ final class YAWPTController extends \Jackbooted\Util\JB {
 
     public function shortCodeInit() {
         add_shortcode( self::SLUG . '-partials',  [ $this, 'shortPartialEdit' ] );
+        add_shortcode( self::SLUG . '-geoip',     [ $this, 'shortGeoIP'       ] );
     }
 
     public function shortPartialEdit( $atts = [], $content = null, $tag = '' ) {
         return $this->shortCodeGeneric( \App\Controllers\PartialEditController::class, $atts, $content, $tag );
+    }
+
+    public function shortGeoIP( $atts = [], $content = null, $tag = '' ) {
+        return $this->shortCodeGeneric( \App\Controllers\GeoIPController::class, $atts, $content, $tag );
     }
 
     public function shortCodeGeneric( $clazz, $atts, $content, $tag ) {

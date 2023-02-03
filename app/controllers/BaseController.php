@@ -15,7 +15,7 @@ class BaseController extends \Jackbooted\Html\WebPage {
     protected $settings;
     protected $partialDir;
 
-    protected $dcClient;
+    protected $apiClient;
 
     public function __construct () {
         parent::__construct();
@@ -40,6 +40,7 @@ class BaseController extends \Jackbooted\Html\WebPage {
 
         $this->settings   = YAWPTController::instance()->settings;
         $this->partialDir = YAWPT_PARTIALS;
+        $this->apiClient  = new \App\Libraries\IPGeolocationAPI( $this->settings->apiUrl(), $this->settings->apiKey() );
     }
 
     // Facade create a response object
