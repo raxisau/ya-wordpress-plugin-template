@@ -13,7 +13,7 @@ class IPGeolocationAPI extends RestAPI {
 
     // https://ipgeolocation.io/documentation/ip-geolocation-api.html
     public function singleIPGeoLookup( $ip ) {
-        $url = sprintf( '$s/ipgeo?apiKey=%s&ip=%s', $this->url, $this->apiKey, $ip );
+        $url = sprintf( '%s/ipgeo?apiKey=%s&ip=%s', $this->url, $this->apiKey, $ip );
         return self::get( $url );
     }
 }
