@@ -14,7 +14,7 @@ class GeoIPController extends BaseController {
     public function index() {
         [ $action, $actSep ] = $this->getAction();
         $resp = $this->response( 'index' );
-        $fldIP = \Jackbooted\Forms\Request::get( 'fldIP', $_SERVER['REMOTE_ADDR'] );
+        $fldIP = \Jackbooted\Forms\Request::get( 'fldIP', $this->getUserIP() );
         $response = $this->apiClient->singleIPGeoLookup( $fldIP );
         if ( $response['error'] ) {
             $message = $response['msg'];
@@ -49,5 +49,28 @@ class GeoIPController extends BaseController {
                   Tag::_div() .
                 Tag::_div();
         return $html;
+    }
+
+    private function getUserIP () {
+        if (getenv('HTTP_CLIENT_IP')) {
+            $ip = getenv('HTTP_CLIENT_IP');
+        }
+        elseif (getenv('HTTP_X_FORWARDED_FOR')) {
+            $ip = getenv('HTTP_X_FORWARDED_FOR');
+        }
+        elseif (getenv('HTTP_X_FORWARDED')) {
+            $ip = getenv('HTTP_X_FORWARDED');
+        }
+        elseif (getenv('HTTP_FORWARDED_FOR')) {
+            $ip = getenv('HTTP_FORWARDED_FOR');
+        }
+        elseif (getenv('HTTP_FORWARDED')) {
+            $ip = getenv('HTTP_FORWARDED');
+        }
+        else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
     }
 }
