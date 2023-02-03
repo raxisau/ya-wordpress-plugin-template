@@ -15,6 +15,13 @@ class GeoIPController extends BaseController {
         [ $action, $actSep ] = $this->getAction();
         $resp = $this->response( 'index' );
         $fldIP = \Jackbooted\Forms\Request::get( 'fldIP', $_SERVER['REMOTE_ADDR'] );
+        $response = $this->apiClient->singleIPGeoLookup( $fldIP );
+        if ( $response['error'] ) {
+            $message = $response['msg'];
+        }
+        else {
+            $message = json_encode( $response['result'], JSON_PRETTY_PRINT );
+        }
 
         $html = Tag::div([ 'class' => 'container']) .
                   Tag::div([ 'class' => 'row']) .
@@ -35,9 +42,9 @@ class GeoIPController extends BaseController {
                           Tag::_tr() .
                         Tag::_table() .
                        Tag::_form() .
-                       '<pre>' .
-                           json_encode( $this->apiClient->singleIPGeoLookup( $fldIP ), JSON_PRETTY_PRINT ) .
-                       '</pre>' .
+                       Tag::pre() .
+                         $message .
+                       Tag::_pre() .
                     Tag::_div() .
                   Tag::_div() .
                 Tag::_div();
