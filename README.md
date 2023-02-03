@@ -36,6 +36,19 @@ I am happy to get your input suggestions feedback etc.
 
 ## Techical Implementation Guide
 
+### TL;DR
+
+* run zip.sh
+* install and activate plugin into wordpress 
+* Get an API Key from https://app.ipgeolocation.io/
+* Go into settings and add API Key and API URL: https://api.ipgeolocation.io
+* Create a page in your wordpress
+* Add the following shortcode to the page
+* `[yawpt-geoip][/yawpt-geoip]`
+* Save and you are all done.
+
+The above is an example of how you can use this plugin
+
 TODO: Discuss the parts of the implementation and relate it back to the wordpress system.
 
 This plugin includes a vendor directory from jackbooted.com that contains a https://laravel.com type 
