@@ -30,6 +30,7 @@ class Paginator extends Navigator {
     const ROWS_PER_PAGE     = 'P';
     const LOG_THRESHOLD     = 'L';
     const PAGE_VAR          = '_PG';
+    const PAGE_VAR_REGEX    = '/^_PG.*$/';
     const SUBMIT            = 'S';
     const PAGE_LINK_CLASS   = 'PAGE_LINK_CLASS';
     const PAGE_BUTTON_CLASS = 'PAGE_BUTTON_CLASS';

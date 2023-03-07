@@ -62,6 +62,7 @@ class Response extends PipeLine {
         $this->exemptKeys[$key] = true;
         return $this;
     }
+    
     public function getExempt( ) {
         return array_keys( $this->exemptKeys );
     }

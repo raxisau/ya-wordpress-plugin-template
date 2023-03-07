@@ -22,10 +22,11 @@ use \Jackbooted\Util\Invocation;
  */
 class Columnator extends Navigator {
 
-    const SORT_COL = 'C';
-    const SORT_ORDER = 'O';
-    const COL_VAR = '_CL';
-    const COL_LINK_CLASS = 'COL_LINK_CLASS';
+    const SORT_COL         = 'C';
+    const SORT_ORDER       = 'O';
+    const COL_VAR          = '_CL';
+    const COL_VAR_REGEX    = '/^_CL.*$/';
+    const COL_LINK_CLASS   = 'COL_LINK_CLASS';
     const COL_BUTTON_CLASS = 'COL_BUTTON_CLASS';
 
     private static $columnation = [

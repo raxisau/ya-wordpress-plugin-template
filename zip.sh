@@ -1,12 +1,13 @@
 #!/bin/bash
+export SLUG=ya-wordpress-plugin-template
 
 cd ..
-rm -f   ya-wordpress-plugin-template.zip
-zip -r  ya-wordpress-plugin-template.zip \
-        ya-wordpress-plugin-template \
-    -x "ya-wordpress-plugin-template/*.sh" \
-    -x "ya-wordpress-plugin-template/.git/*" \
-    -x "ya-wordpress-plugin-template/.gitignore" \
+rm -f   ${SLUG}.zip
+zip -r  ${SLUG}.zip \
+        ${SLUG} \
+    -x "${SLUG}/*.sh" \
+    -x "${SLUG}/.git/*" \
+    -x "${SLUG}/.gitignore" \
     -x "*/.DS_Store"
 cd -
 

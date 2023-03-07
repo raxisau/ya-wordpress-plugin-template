@@ -21,7 +21,7 @@ abstract class Navigator extends \Jackbooted\Util\JB {
     protected $attribs;
     protected $formVars;
     protected $navVar;
-    protected $action = '?';
+    public    $action = '?';
 
     public function __construct() {
         parent::__construct();
@@ -42,7 +42,10 @@ abstract class Navigator extends \Jackbooted\Util\JB {
      * @return Response
      */
     public function get( $key ) {
-        return $this->formVars[$key];
+        if ( isset( $this->formVars[$key] ) ) {
+            return $this->formVars[$key];
+        }
+        return '';
     }
 
     /**

@@ -200,6 +200,7 @@ JS;
         if ( isset( $extraArgs['colSortOrder'] ) ) {
             $colProps['init_order'] = $extraArgs['colSortOrder'];
         }
+
         $this->columnator = new Columnator( $colProps );
 
         $this->resp = new Response ();
@@ -208,8 +209,10 @@ JS;
             $this->paginator->setPageSize( $extraArgs['displayRows'] );
         }
 
-        if ( !$this->getTableMetaData() )
+        if ( !$this->getTableMetaData() ) {
             return;
+        }
+
         $this->setupDefaultStyle();
 
         if ( $this->paginator->getRows() <= 0 ) {
@@ -447,12 +450,12 @@ JS;
             }
             $sql = 'INSERT INTO ' . $this->tableName;
             if ( count( $params ) > 0 ) {
-                $sql .= ' (' . join( ',', array_keys( $params ) ) . ') ' .
-                        'VALUES (' . DB::in( array_values( $params ), $paramValues ) . ')';
+                $sql .= ' (' . join( ',', array_keys( $params ) ) . ') VALUES (' . DB::in( array_values( $params ), $paramValues ) . ')';
             }
 
             $insertedCnt += $this->exec( $sql, $paramValues );
         }
+
         if ( $insertedCnt > 0 ) {
             $this->paginator->setRows( $this->getRowCount() );
         }
@@ -658,7 +661,6 @@ JS;
                 if ( !$result->ok() ) {
                     return false;
                 }
-
                 $fieldColumn = $result->getColumn( 'COLUMN_NAME' );
                 $typeColumn = $result->getColumn( 'DATA_TYPE' );
 
@@ -678,7 +680,9 @@ JS;
     }
 
     protected function createSQLResult() {
-        $qry = $this->paginator->getLimits( $this->dbType, 'SELECT * FROM ' . $this->tableName . ' ' . $this->createSQLWhere( $params ) . $this->columnator->getSort() );
+        $qry = $this->paginator->getLimits( $this->dbType, 'SELECT * FROM ' . $this->tableName . ' ' .
+                $this->createSQLWhere( $params ) .
+                $this->columnator->getSort() );
         $tab = $this->query( $qry, $params );
 
         //echo '<pre>createSQLResult: ' . $qry . "\n";
@@ -690,11 +694,13 @@ JS;
 
     private function calculateColumnWidths( &$tab ) {
         foreach ( $this->columnTitles as $colName => $title ) {
-            if ( isset( $this->cellAttributes[$colName]['size'] ) )
+            if ( isset( $this->cellAttributes[$colName]['size'] ) ) {
                 continue;
+            }
             $width = $this->arrayMaxStringLength( $tab->getColumn( $colName ) );
-            if ( $width > 40 )
+            if ( $width > 40 ) {
                 $width = 40;
+            }
             if ( $width >= 0 && $width <= 40 ) {
                 $this->cellAttributes[$colName]['size'] = $width;
             }
