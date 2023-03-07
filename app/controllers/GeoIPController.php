@@ -14,13 +14,18 @@ class GeoIPController extends BaseController {
     public function index() {
         [ $action, $actSep ] = $this->getAction();
         $resp = $this->response( 'index' );
-        $fldIP = \Jackbooted\Forms\Request::get( 'fldIP', $this->getUserIP() );
-        $response = $this->apiClient->singleIPGeoLookup( $fldIP );
-        if ( $response['error'] ) {
-            $message = $response['msg'];
+        if ( ( $fldIP = \Jackbooted\Forms\Request::get( 'fldIP' ) ) != '' ) {
+            $response = $this->apiClient->singleIPGeoLookup( $fldIP );
+            if ( $response['error'] ) {
+                $message = $response['msg'];
+            }
+            else {
+                $message = json_encode( $response['result'], JSON_PRETTY_PRINT );
+            }
         }
         else {
-            $message = json_encode( $response['result'], JSON_PRETTY_PRINT );
+            $fldIP = $this->getUserIP();
+            $message = '';
         }
 
         $html = Tag::div([ 'class' => 'container']) .
