@@ -32,11 +32,26 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
 
         $this->pluginName = YAWPT_NAME;
 
+        // These fields set up the options that we want in this plugin
         $this->fields = [
-            self::APIKEY    => [ 'title' => 'API Key',             'function' => [ $this, 'apiKeyCallback' ] ],
-            self::APIURL    => [ 'title' => 'API URL',             'function' => [ $this, 'apiUrlCallback' ] ],
-            self::TWOCHANCE => [ 'title' => 'Allow Second Chance', 'function' => [ $this, 'twoChanceCallback' ] ],
+            self::APIKEY => [
+                'title'    => 'API Key',
+                'function' => function () {
+                    $this->textInput( self::APIKEY, $this->apiKey() );
+                }
+            ],
+            self::APIURL  => [
+                'title'    => 'API URL',
+                'function' => function () {
+                    $this->textInput( self::APIURL, $this->apiUrl() );
+                }
+            ],
+            self::TWOCHANCE => [
+                'title' => 'Allow Second Chance',
+                'function' => [ $this, 'twoChanceCallback' ]
+            ],
         ];
+
         $this->textfields = [
             self::APIKEY,
             self::APIURL,
@@ -46,30 +61,50 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
         ];
 
         $this->menuList = [
-            '_edt' => [ 'page_title' => 'Partial Editor', 'menu_title' => 'Partial Editor', 'callback' => [ $this, 'editPartials' ] ],
-            '_dbg' => [ 'page_title' => 'Debug Info',     'menu_title' => 'Debug Info',     'callback' => [ $this, 'debugInfo' ] ],
+            '_edt' => [
+                'page_title' => 'Partial Editor',
+                'menu_title' => 'Partial Editor',
+                'callback'   => function () {
+                    $this->genericBridge( 'Edit Partials', \App\Controllers\PartialEditController::class );
+                },
+            ],
+            '_dbg' => [
+                'page_title' => 'Debug Info',
+                'menu_title' => 'Debug Info',
+                'callback'   => function () {
+                    $this->genericBridge( 'Debug Information', \App\Controllers\DebugController::class );
+                },
+            ],
         ];
 
         add_action( 'admin_menu', [ $this, 'addPluginPage' ] );
         add_action( 'admin_init', [ $this, 'pageInit' ] );
     }
 
+    // This is for wordpress
     public function get_plugin_name() {
         return apply_filters( 'YAWPT/settings/get_plugin_name', $this->pluginName );
     }
 
-    public function editPartials( ) {
-        $this->genericBridge( 'Edit Partials', \App\Controllers\PartialEditController::class );
+    // ------------------------------------------------------------------
+    // GETTERS - These functions will get the option that you are interested in
+    public function apiKey() {
+       $opts = $this->getOptions();
+       return ( isset( $opts[self::APIKEY] ) ) ? $opts[self::APIKEY] : '';
     }
+    public function apiUrl() {
+        $opts = $this->getOptions();
+        return ( isset( $opts[self::APIURL] ) ) ? $opts[self::APIURL] : '';
+    }
+    public function twoChance() {
+        $opts = $this->getOptions();
+        return ( isset( $opts[self::TWOCHANCE] ) ) ? $opts[self::TWOCHANCE] : 'NO';
+    }
+    // ------------------------------------------------------------------
 
-    public function debugInfo( ) {
-        $this->genericBridge( 'Debug Information', \App\Controllers\DebugController::class );
-    }
-
-    public function redirectTest( ) {
-        $this->genericBridge( 'Redirect Test', \App\Controllers\RedirectTestController::class );
-    }
-    
+    // ------------------------------------------------------------------
+    // This is a utility function that will run a Jack controller in WordPress admin screen
+    // generic function that will initiate a controller
     private function genericBridge( $title, $clazz ) {
         if ( ( $jackHtml = $clazz::controller( $clazz::DEF, $clazz::ACTION ) ) === false ) {
             $jackHtml = 'No output for this item - '. $title;
@@ -82,6 +117,16 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
                 </form>
             </div>
 HTML;
+    }
+    // ------------------------------------------------------------------
+
+    // Don't have a generic checkbox field so write this one directly
+    // You could create a generic checkbox function in the same way that I did a text box, but
+    // this highlights the versitility. Do not need to use the generic stuff, can roll your own
+    public function twoChanceCallback() {
+        $fieldName  = self::TWOCHANCE;
+        $fieldValue = $this->twoChance();
+        printf( '<input name="%s[%s]" type="checkbox" id="%s" value="YES" %s>', $this->optionName, $fieldName, $fieldName, ( $fieldValue == 'YES' ) ? 'checked' : '' );
     }
 
     /////-----------------------------------------------------------------------------------
@@ -136,7 +181,7 @@ HTML;
                 $sanitary_values[$key] = sanitize_text_field( $input[$key] );
             }
         }
-        
+
         foreach ( $this->checkfields as $key ) {
             $sanitary_values[$key] = ( isset( $input[$key] ) &&  $input[$key] == 'YES' ) ? 'YES' : 'NO';
         }
@@ -145,20 +190,6 @@ HTML;
     }
 
     public function sectionInfo() {
-    }
-
-    public function apiKeyCallback() {
-        $this->textInput( self::APIKEY, $this->apiKey() );
-    }
-
-    public function apiUrlCallback() {
-        $this->textInput( self::APIURL, $this->apiUrl() );
-    }
-
-    public function twoChanceCallback() {
-        $fieldName  = self::TWOCHANCE;
-        $fieldValue = $this->twoChance();
-        printf( '<input name="%s[%s]" type="checkbox" id="%s" value="YES" %s>', $this->optionName, $fieldName, $fieldName, ( $fieldValue == 'YES' ) ? 'checked' : '' );
     }
 
     private function textInput( $fieldName, $fieldValue ) {
@@ -170,19 +201,5 @@ HTML;
             $this->options = get_option( $this->optionName );
         }
         return $this->options;
-    }
-
-    public function apiKey() {
-        $opts = $this->getOptions();
-        return ( isset( $opts[self::APIKEY] ) ) ? $opts[self::APIKEY] : '';
-    }
-
-    public function apiUrl() {
-        $opts = $this->getOptions();
-        return ( isset( $opts[self::APIURL] ) ) ? $opts[self::APIURL] : '';
-    }
-    public function twoChance() {
-        $opts = $this->getOptions();
-        return ( isset( $opts[self::TWOCHANCE] ) ) ? $opts[self::TWOCHANCE] : 'NO';
     }
 }
