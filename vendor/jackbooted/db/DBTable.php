@@ -264,7 +264,7 @@ class DBTable extends \Jackbooted\Util\JB implements \Iterator {
      * @since 1.0
      * @return array
      */
-    public function &current() {
+    public function &current() : mixed {
         return $this->getRow( $this->currentRow );
     }
 
@@ -274,7 +274,7 @@ class DBTable extends \Jackbooted\Util\JB implements \Iterator {
      * @since 1.0
      * @return integer
      */
-    public function key() {
+    public function key() : mixed {
         return $this->currentRow;
     }
 
@@ -284,7 +284,7 @@ class DBTable extends \Jackbooted\Util\JB implements \Iterator {
      * @since 1.0
      * @return void
      */
-    public function next() {
+    public function next() : void {
         ++$this->currentRow;
     }
 
@@ -294,7 +294,7 @@ class DBTable extends \Jackbooted\Util\JB implements \Iterator {
      * @since 1.0
      * @return void
      */
-    public function rewind() {
+    public function rewind() : void {
         $this->currentRow = 0;
     }
 
@@ -304,7 +304,7 @@ class DBTable extends \Jackbooted\Util\JB implements \Iterator {
      * @since 1.0
      * @return boolean
      */
-    public function valid() {
+    public function valid() : bool {
         return $this->currentRow < $this->getRowCount();
     }
 
