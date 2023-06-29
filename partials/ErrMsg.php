@@ -4,6 +4,7 @@ namespace App;
 class ErrMsg extends \Jackbooted\Util\JB {
     //<body><pre>
     // ------ Edit below line only.
+    const DOMAIN_FORMAT = 'The domain name (%s) is not valid format.';
     const FORM_MISSING  = 'Form variable %s cannot be empty, please re-enter';
     const EMAIL_FORMAT  = 'The email (%s) is not valid format';
     const PAN           = 'Invalid Payment Card number, please re-enter';

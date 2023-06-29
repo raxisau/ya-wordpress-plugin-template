@@ -25,14 +25,7 @@ require_once __DIR__ . '/config.php';
 define( 'YAWPT_NAME',        'Yet Another Wordpress Plugin Template' );
 define( 'YAWPT_VERSION',     '1.0.1' );
 define( 'YAWPT_PLUGIN_FILE', __FILE__ );
-define( 'YAWPT_PLUGIN_BASE', plugin_basename( YAWPT_PLUGIN_FILE ) );
-define( 'YAWPT_PLUGIN_DIR',  plugin_dir_path( YAWPT_PLUGIN_FILE ) );
-define( 'YAWPT_PLUGIN_URL',  plugin_dir_url(  YAWPT_PLUGIN_FILE ) );
-define( 'YAWPT_PLUGIN_NAME', basename( __FILE__, '.php' ) ); 
-define( 'YAWPT_SLUG',        basename( __FILE__, '.php' ) ); 
-define( 'YAWPT_PRODREADY',   false );
-define( 'YAWPT_CURURL',      $_SERVER['SCRIPT_URI'] );
-define( 'YAWPT_PARTIALS',    __DIR__ . '/partials' );
+define( 'YAWPT_SLUG',        basename( __FILE__, '.php' ) );
 
 function YAWPT() {
 	return \App\Controllers\YAWPTController::instance();

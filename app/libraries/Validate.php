@@ -4,7 +4,7 @@ namespace App\Libraries;
 use \Jackbooted\Forms\Request;
 
 class Validate extends \Jackbooted\Util\JB {
-    
+
     public static function  creditCard() {
         $payPAN = preg_replace( '/[^\d]/', '', Request::get( 'inputCardNumber' ) );
         $payExp = preg_replace( '/[^\d]/', '', Request::get( 'inputCardExpiry' ) );
@@ -54,12 +54,23 @@ class Validate extends \Jackbooted\Util\JB {
         return [ $firstName, $lastName, false ];
     }
 
+    public static function domain() {
+        $domain = trim( Request::get( 'inputDomainName' ) );
+
+        if ( ! preg_match('/^[a-z,0-9]+[a-z,0-9,\-,\_]*(\.[a-z]{2,3})?\.au$/', $domain ) ) {
+            $errMsg = sprintf( \App\ErrMsg::DOMAIN_FORMAT, $domain );
+            return [ $domain, self::errMsg( $errMsg ) ];
+        }
+
+        return [ $domain, false ];
+    }
+
     private static function errMsg( $val, $title='Error' ) {
         $data = [
             'message' => $val,
             'title'   => $title
         ];
-        $template = new \Jackbooted\Html\Template( DHU_PARTIALS . '/message_error.html', \Jackbooted\Html\Template::FILE );
+        $template = new \Jackbooted\Html\Template( dirname( dirname( __DIR__ ) ) . '/partials/message_error.html', \Jackbooted\Html\Template::FILE );
         return $template->replace( $data )->toHtml();
     }
 }

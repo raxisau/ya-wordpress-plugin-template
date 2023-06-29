@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 final class YAWPTController extends \Jackbooted\Util\JB {
     const SLUG = 'yawpt';
-    
+
     private static $instance = null;
     private static $allModels = [
         '\App\Models\MutexDAO',
@@ -23,7 +23,9 @@ final class YAWPTController extends \Jackbooted\Util\JB {
     }
 
     public static function instance() {
-        if ( self::$instance != null ) return self::$instance;
+        if ( self::$instance != null ) {
+            return self::$instance;
+        }
 
         self::$instance = new YAWPTController();
 
@@ -33,7 +35,7 @@ final class YAWPTController extends \Jackbooted\Util\JB {
 
     function __construct() {
         parent::__construct();
-        
+
         // Set up the Admin Stuff
         $this->settings = new YAWPTSettingsController();
 
@@ -60,7 +62,7 @@ final class YAWPTController extends \Jackbooted\Util\JB {
 
     // See here for WP Ajax development https://honarsystems.com/ajax-wordpress-development/
     public function ajaxGetInfo() {
-        $response = ['error' => false ]; 
+        $response = ['error' => false ];
         if ( $response['error'] ) {
             echo "Error occured, please try again";
         }
@@ -72,18 +74,19 @@ final class YAWPTController extends \Jackbooted\Util\JB {
 
     public function enqueueInit() {
         wp_enqueue_script( 'jquery' );
-        
+
         wp_enqueue_script( 'bootstrap-js', '//cdn.usebootstrap.com/bootstrap/latest/js/bootstrap.min.js', [ 'jquery'] , true);
         wp_enqueue_style(  'bootstrap',    '//cdn.usebootstrap.com/bootstrap/latest/css/bootstrap.min.css' );
 
         $pluginUrl = plugins_url( YAWPT_SLUG );
+
 		wp_enqueue_style(  YAWPT_SLUG . '-fa',     $pluginUrl . '/assets/fontawesome-all.min.css', null, YAWPT_VERSION );
-		wp_enqueue_style(  YAWPT_SLUG . '-styles', $pluginUrl . '/assets/style.css', null, YAWPT_VERSION );
+		wp_enqueue_style(  YAWPT_SLUG . '-styles', $pluginUrl . '/assets/style.css',               null, YAWPT_VERSION );
         wp_enqueue_script( YAWPT_SLUG . '-script', $pluginUrl . '/assets/custom.js' );
     }
 
     public function loadTextdomain() {
-        load_plugin_textdomain( YAWPT_PLUGIN_NAME, FALSE, YAWPT_PLUGIN_DIR . '/languages/' );
+        load_plugin_textdomain( YAWPT_SLUG, FALSE,  dirname( dirname ( __DIR__ ) ) . '/languages/' );
     }
 
     public function onActivation() {
@@ -116,7 +119,7 @@ final class YAWPTController extends \Jackbooted\Util\JB {
         check_admin_referer( 'bulk-plugins' );
 
         // Important: Check if the file is the one that was registered during the uninstall hook.
-        if ( YAWPT_PLUGIN_NAME != WP_UNINSTALL_PLUGIN ) {
+        if ( YAWPT_SLUG != WP_UNINSTALL_PLUGIN ) {
             return;
         }
 
@@ -127,13 +130,12 @@ final class YAWPTController extends \Jackbooted\Util\JB {
     }
 
     public function shortCodeInit() {
+        // $a = Attributes passed in from the shortcode
+        // $c = contents in the short code
+        // $t = Tag name
         $shortcodeList = [
-            self::SLUG . '-partials' => function( $atts=[], $content=null, $tag='' ) {
-                return $this->shortCodeGeneric( \App\Controllers\PartialEditController::class, $atts, $content, $tag );
-            },
-            self::SLUG . '-geoip'    => function( $atts=[], $content=null, $tag='' ) {
-                return $this->shortCodeGeneric( \App\Controllers\GeoIPController::class, $atts, $content, $tag );
-            },
+            self::SLUG . '-partials' => function( $a=[], $c=null, $t='' ){ return $this->shortCode( \App\Controllers\PartialEditController::class, $a, $c, $t ); },
+            self::SLUG . '-geoip'    => function( $a=[], $c=null, $t='' ){ return $this->shortCode( \App\Controllers\GeoIPController::class,       $a, $c, $t ); },
         ];
 
         foreach ( $shortcodeList as $shortCode => $func ) {
@@ -141,8 +143,7 @@ final class YAWPTController extends \Jackbooted\Util\JB {
         }
     }
 
-    public function shortCodeGeneric( $clazz, $atts, $content, $tag ) {
-        // Put the shortcode variables in the Request structure so can be retreived in the programs
+    public function shortCode( $clazz, $atts, $content, $tag ) {
         \Jackbooted\Forms\Request::set( 'inject_atts'   , $atts );
         \Jackbooted\Forms\Request::set( 'inject_content', $content );
         \Jackbooted\Forms\Request::set( 'inject_tag'    , $tag );
@@ -153,8 +154,8 @@ final class YAWPTController extends \Jackbooted\Util\JB {
     }
 
     public function footerCustomerHtml() {
-        $template = new \Jackbooted\Html\Template( YAWPT_PARTIALS . '/spinner.html', \Jackbooted\Html\Template::FILE );
-        echo $template->replace( [ 'plugin_dir' => YAWPT_PLUGIN_URL ] )->toHtml();
+        $template = new \Jackbooted\Html\Template( dirname( dirname( __DIR__ ) ) . '/partials/spinner.html', \Jackbooted\Html\Template::FILE );
+        echo $template->replace( [ 'plugin_dir' => plugin_dir_url( dirname( __DIR__ ) ) ] )->toHtml();
     }
 
     public static function notifySupport( $subject, $msg ) {
@@ -176,7 +177,7 @@ final class YAWPTController extends \Jackbooted\Util\JB {
         $fullEmail = MailData::$emailHeader . $body . MailData::$emailFooter;
 
         $htmlFunc = [ __CLASS__, 'wpMailHtml' ];
-        add_filter(    'wp_mail_content_type', $htmlFunc );
+        add_filter( 'wp_mail_content_type', $htmlFunc );
         $emailResult = wp_mail( $emailTo, $subject, $fullEmail, $headers );
         remove_filter( 'wp_mail_content_type', $htmlFunc );
 

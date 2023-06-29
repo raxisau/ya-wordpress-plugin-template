@@ -10,20 +10,16 @@ class BaseController extends \Jackbooted\Html\WebPage {
     protected $nickName   = 'nobody';
     protected $isAdmin    = false;
     protected $isLoggedIn = false;
-    protected $debugMode  = false;
     protected $curURL;
     protected $settings;
     protected $partialDir;
+    protected $pluginURL;
+    protected $assetsURL;
 
     protected $apiClient;
 
     public function __construct () {
         parent::__construct();
-
-        if ( ! YAWPT_PRODREADY ) {
-            \App\App::debug();
-            $this->debugMode = true;
-        }
 
         $user = wp_get_current_user();
         $this->curUser = $user;
@@ -39,8 +35,15 @@ class BaseController extends \Jackbooted\Html\WebPage {
         }
 
         $this->settings   = YAWPTController::instance()->settings;
-        $this->partialDir = YAWPT_PARTIALS;
+
+        $this->partialDir = dirname( dirname( __DIR__ ) ) . '/partials';
+        $this->assetsURL  = plugin_dir_url( \Jackbooted\Config\Cfg::get( 'site_path' ) . '/1.php' ) . 'assets';
+
         $this->apiClient  = new \App\Libraries\IPGeolocationAPI( $this->settings->apiUrl(), $this->settings->apiKey() );
+
+        if ( $this->settings->debugMode() ) {
+            \App\App::debug();
+        }
     }
 
     // Facade create a response object
@@ -59,7 +62,7 @@ class BaseController extends \Jackbooted\Html\WebPage {
         if ( $this->isLoggedIn ) { return ''; }
         return $this->template( [], 'message_login.html' );
     }
-     
+
     protected function errMsg( $val, $title='Error' ) {
         return $this->template( [ 'message' => $val, 'title' => $title ], 'message_error.html' );
     }
@@ -69,7 +72,7 @@ class BaseController extends \Jackbooted\Html\WebPage {
     }
 
     // FAcade over outputting template
-    protected function template( $data, $fileName ) {
+    public function template( $data, $fileName ) {
         // This automatically puts this in the ajax URL into the tempate variables
         $data['ajaxUrl'] = admin_url( 'admin-ajax.php' );
 
@@ -95,7 +98,6 @@ class BaseController extends \Jackbooted\Html\WebPage {
         return $errStr .
                $this->template( [], 'syserr.html' );
     }
-    
     protected function getAction( ) {
         $action = $_SERVER['REQUEST_URI'];
         $actSep = ( strpos( $action, '?' ) === false ) ? '?' : '&';

@@ -47,8 +47,10 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
                 }
             ],
             self::TWOCHANCE => [
-                'title' => 'Allow Second Chance',
-                'function' => [ $this, 'twoChanceCallback' ]
+                'title' => 'Debug Mode',
+                'function' => function () {
+                    $this->checkboxInput( self::TWOCHANCE, $this->debugMode() );
+                }
             ],
         ];
 
@@ -96,7 +98,7 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
         $opts = $this->getOptions();
         return ( isset( $opts[self::APIURL] ) ) ? $opts[self::APIURL] : '';
     }
-    public function twoChance() {
+    public function debugMode() {
         $opts = $this->getOptions();
         return ( isset( $opts[self::TWOCHANCE] ) ) ? $opts[self::TWOCHANCE] : 'NO';
     }
@@ -118,17 +120,9 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
             </div>
 HTML;
     }
-    // ------------------------------------------------------------------
 
-    // Don't have a generic checkbox field so write this one directly
-    // You could create a generic checkbox function in the same way that I did a text box, but
-    // this highlights the versitility. Do not need to use the generic stuff, can roll your own
-    public function twoChanceCallback() {
-        $fieldName  = self::TWOCHANCE;
-        $fieldValue = $this->twoChance();
-        printf( '<input name="%s[%s]" type="checkbox" id="%s" value="YES" %s>', $this->optionName, $fieldName, $fieldName, ( $fieldValue == 'YES' ) ? 'checked' : '' );
-    }
-
+    /////-----------------------------------------------------------------------------------
+    ///// vvvv Below this line is all standard functions and should not need to change vvvvv
     /////-----------------------------------------------------------------------------------
     ///// vvvv Below this line is all standard functions and should not need to change vvvvv
     public function addPluginPage() {
@@ -194,6 +188,9 @@ HTML;
 
     private function textInput( $fieldName, $fieldValue ) {
         printf( '<input class="regular-text" type="text" name="%s[%s]" id="%s" value="%s">', $this->optionName, $fieldName, $fieldName, esc_attr( $fieldValue ) );
+    }
+    public function checkboxInput( $fieldName, $fieldValue ) {
+        printf( '<input name="%s[%s]" type="checkbox" id="%s" value="YES" %s>', $this->optionName, $fieldName, $fieldName, ( $fieldValue == 'YES' ) ? 'checked' : '' );
     }
 
     public function getOptions() {
