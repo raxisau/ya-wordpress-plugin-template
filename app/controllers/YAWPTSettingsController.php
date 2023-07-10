@@ -124,7 +124,6 @@ HTML;
     /////-----------------------------------------------------------------------------------
     ///// vvvv Below this line is all standard functions and should not need to change vvvvv
     /////-----------------------------------------------------------------------------------
-    ///// vvvv Below this line is all standard functions and should not need to change vvvvv
     public function addPluginPage() {
         $configCallback = [ $this, 'createAdminPage' ];
 
