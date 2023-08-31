@@ -22,6 +22,8 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
     private $settingSection = self::SLUG . '_setting_section';
     private $pageName       = self::SLUG . '-admin';
 
+    private $textfields = false;
+
     // https://developer.wordpress.org/resource/dashicons
     private $helpIcon       = 'dashicons-media-document';
 
