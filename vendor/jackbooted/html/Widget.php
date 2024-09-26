@@ -6,7 +6,7 @@ use \Jackbooted\Config\Cfg;
 use \Jackbooted\Util\Invocation;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -29,10 +29,10 @@ class Widget extends \Jackbooted\Util\JB {
         self::$buttonDomSelectorList[] = $domSelector;
 
         $js = <<<JS
-            $().ready ( function () {
-                $("$domSelector").button();
+            jQuery().ready ( function () {
+                jQuery("$domSelector").button();
             });
-JS;
+        JS;
         return JS::libraryWithDependancies( JS::JQUERY_UI ) .
                 JS::javaScript( $js );
     }
@@ -58,7 +58,7 @@ JS;
                 .ui-widget {
                     font-size: 1.0em;
                 }
-CSS;
+            CSS;
             $html .= JS::css( $css );
         }
 
@@ -70,8 +70,8 @@ CSS;
         $pickListJSON = json_encode( $pickList );
         $js = <<<JS
             var isOpen = false;
-            $().ready ( function () {
-                $("$tag")
+            jQuery().ready ( function () {
+                jQuery("$tag")
                     .autocomplete({
                         minLength: 0,
                         open: function(event, ui) { isOpen = true; },
@@ -79,7 +79,7 @@ CSS;
                         source: $pickListJSON
                     })
                     .attr( 'size', $maxLength );
-                $('<button type="button">&nbsp;</button>')
+                jQuery('<button type="button">&nbsp;</button>')
                     .attr( 'tabIndex', -1 )
                     .attr( 'title', 'Show All Items' )
                     .button({
@@ -88,17 +88,17 @@ CSS;
                     })
                     .removeClass( 'ui-corner-all' )
                     .addClass( 'ui-corner-right ui-button-icon' )
-                    .insertAfter ( $("$tag") )
+                    .insertAfter ( jQuery("$tag") )
                     .click(function() {
                         if ( isOpen ) {
-                            $('$tag').autocomplete('close');
+                            jQuery('$tag').autocomplete('close');
                         }
                         else {
-                            $('$tag').autocomplete('search','').focus();
+                            jQuery('$tag').autocomplete('search','').focus();
                         }
                     });
             });
-JS;
+        JS;
         return JS::libraryWithDependancies( JS::JQUERY_UI ) .
                 $html .
                 JS::javaScript( $js );
@@ -108,7 +108,7 @@ JS;
         if ( $apikey == 'no-api-key' ) {
             $apikey = Cfg::get('tinymce_api', 'no-api-key');
         }
-        
+
         if ( $apikey == '' || $apikey == null ) {
             $apikey = 'no-api-key';
         }
@@ -116,7 +116,7 @@ JS;
         $mceHeight = ( $height == '' ) ? '' : "height: {$height},";
 
         $js = <<<JS
-            $().ready(function() {
+            jQuery().ready(function() {
                 tinymce.init({
                     {$mceHeight}
                     selector: '{$selector}',
@@ -132,7 +132,7 @@ JS;
                     convert_urls: false
                 });
             });
-JS;
+        JS;
 
         return JS::library ( JS::JQUERY ) .
                "<script src='//cdn.tiny.cloud/1/$apikey/tinymce/5/tinymce.min.js' referrerpolicy='origin'></script>" .
@@ -147,28 +147,28 @@ JS;
 
         if ( $timeout < 0 ) {
             $timeoutJS = <<<JS
-            modal: true,
-JS;
+                modal: true,
+            JS;
         }
         else {
             $timeoutJS = <<<JS
-            modal: false,
-            open: function(event, ui) {
-                setTimeout ( "$('#popupWrapper_$id').dialog('close')", $timeout );
-            },
-JS;
+                modal: false,
+                open: function(event, ui) {
+                    setTimeout ( "jQuery('#popupWrapper_$id').dialog('close')", $timeout );
+                },
+            JS;
         }
 
         $js = <<<JS
-    $().ready(function() {
-        $('<div id="popupWrapper_$id" title="$title">$msg</div>' )
-            .dialog({
-                $timeoutJS
-                hide: 'fade',
-                position: { at: "top+200" }
+            jQuery().ready(function() {
+                jQuery('<div id="popupWrapper_$id" title="$title">$msg</div>' )
+                    .dialog({
+                        $timeoutJS
+                        hide: 'fade',
+                        position: { at: "top+200" }
+                    });
             });
-    });
-JS;
+        JS;
 
         return JS::libraryWithDependancies( JS::JQUERY_UI ) .
                 JS::javaScript( $js );
@@ -189,14 +189,14 @@ JS;
 
                         return this.each(function () {
 
-                            input = $(this);
+                            input = jQuery(this);
                             input.addClass(options.css);
 
                             input.find("tr").on('mouseover mouseout', function (event) {
                                 if (event.type == 'mouseover') {
-                                    $(this).children("td").addClass("ui-state-hover");
+                                    jQuery(this).children("td").addClass("ui-state-hover");
                                 } else {
-                                    $(this).children("td").removeClass("ui-state-hover");
+                                    jQuery(this).children("td").removeClass("ui-state-hover");
                                 }
                             });
 
@@ -204,19 +204,19 @@ JS;
                             input.find("td").addClass("ui-widget-content");
 
                             input.find("tr").each(function () {
-                                $(this).children("td:not(:first)").addClass("first");
-                                $(this).children("th:not(:first)").addClass("first");
+                                jQuery(this).children("td:not(:first)").addClass("first");
+                                jQuery(this).children("th:not(:first)").addClass("first");
                             });
                         });
                     };
                 })(jQuery);
-JS;
+            JS;
             $css = <<<CSS
                 .styleTable { border-collapse: separate; }
                 .styleTable TD { font-weight: normal !important; padding: .3em; border-top-width: 0px !important; }
                 .styleTable TH { text-align: center; padding: .5em .3em; }
                 .styleTable TD.first, .styleTable TH.first { border-left-width: 0px !important; }
-CSS;
+            CSS;
             $html = JS::library( JS::JQUERY_UI_CSS ) .
                     JS::css( $css ) .
                     JS::libraryWithDependancies( JS::JQUERY ) .
@@ -226,17 +226,17 @@ CSS;
             $html = '';
         }
         $js = <<<JS
-            $().ready(function () {
-                $('$selector').styleTable();
+            jQuery().ready(function () {
+                jQuery('$selector').styleTable();
             });
-JS;
+        JS;
         return $html .
-                JS::javaScript( $js );
+               JS::javaScript( $js );
     }
 
     private static $datePickerJSDisplayed = false;
 
-    public static function datePickerJS( $selector = 'input.datepicker' ) {
+    public static function datePickerJS( $selector = 'input.datepicker', $format='yy-mm-dd' ) {
         if ( self::$datePickerJSDisplayed ) {
             return '';
         }
@@ -263,14 +263,14 @@ JS;
          */
 
         $js = <<<JS
-    $().ready(function() {
-        $( "$selector" ).each( function() {
-            $(this).datepicker({
-                dateFormat: "yy-mm-dd"
+            jQuery().ready(function() {
+                jQuery( "$selector" ).each( function() {
+                    jQuery(this).datepicker({
+                        dateFormat: "$format"
+                    });
+                });
             });
-        });
-    });
-JS;
+        JS;
         return JS::libraryWithDependancies( JS::JQUERY_UI ) .
                 JS::javaScript( $js );
     }
@@ -278,15 +278,15 @@ JS;
     public static function facebox( $selector = 'a.facebox' ) {
         $jsUrl = Cfg::get( 'js_url' );
         $js = <<<JS
-    $().ready(function() {
-        $('$selector').facebox({ closeImage:   '$jsUrl/images/closelabel.png',
-                                 loadingImage: '$jsUrl/images/loading.gif'
+            jQuery().ready(function() {
+                jQuery('$selector').facebox({ closeImage:   '$jsUrl/images/closelabel.png',
+                                         loadingImage: '$jsUrl/images/loading.gif'
 
-        });
-    });
-JS;
+                });
+            });
+        JS;
         return JS::libraryWithDependancies( JS::FACEBOX ) .
-                JS::javaScript( $js );
+               JS::javaScript( $js );
     }
 
     public static function reload( $callBack, $url, $numOfSeconds = 20, $css = 'ReloadWidget' ) {
@@ -300,60 +300,52 @@ JS;
 
             function countDown{$id}(){
                 countDownTime{$id}--;
-                $('#stop{$id}').show();
-                $('#start{$id}').hide();
+                jQuery('#stop{$id}').show();
+                jQuery('#start{$id}').hide();
                 if ( countDownTime{$id} <= 0 ) {
                     clearTimeout(counter{$id});
                     updateReloadArea{$id}();
                     return;
                 }
-                $('#countDownText{$id}').html( countDownTime{$id} + '' );
+                jQuery('#countDownText{$id}').html( countDownTime{$id} + '' );
                 counter{$id} = setTimeout( "countDown{$id}()", 1000 );
             }
 
             function stopCount{$id}(){
                 clearTimeout(counter{$id})
-                $('#stop{$id}').hide();
-                $('#start{$id}').show();
+                jQuery('#stop{$id}').hide();
+                jQuery('#start{$id}').show();
             }
 
             function updateReloadArea{$id}(){
                 countDownTime{$id} = countDownInterval{$id} + 1;
                 reloadTimes{$id} = reloadTimes{$id} + 1;
-                $('#reload{$id}').load('{$url}&R='+reloadTimes{$id}, function() {
+                jQuery('#reload{$id}').load('{$url}&R='+reloadTimes{$id}, function() {
                     countDown{$id} ();
                 });
             }
 
-            $().ready ( function () {
+            jQuery().ready ( function () {
                 countDown{$id} ();
             });
-JS;
+        JS;
 
         $html = 'Next ' .
-                Tag::hRef( "javascript:countDownTime{$id}=0", 'refresh', [ 'title' => 'Click here to refresh now.',
-                    'class' => $css ] ) .
+                Tag::hRef( "javascript:countDownTime{$id}=0", 'refresh', [ 'title' => 'Click here to refresh now.', 'class' => $css ] ) .
                 ' in ' .
-                Tag::hTag( 'span', [ 'id' => "countDownText{$id}",
-                    'class' => $css ] ) .
+                Tag::hTag( 'span', [ 'id' => "countDownText{$id}", 'class' => $css ] ) .
                 $numOfSeconds .
                 Tag::_hTag( 'span' ) .
                 ' seconds ' .
-                Tag::hRef( "javascript:stopCount{$id}()", 'Stop', [ 'id' => "stop{$id}",
-                    'title' => 'Click here to stop the timer.',
-                    'class' => $css ] ) .
-                Tag::hRef( "javascript:countDown{$id}()", 'Start', [ 'id' => "start{$id}",
-                    'title' => 'Click here to start the timer.',
-                    'class' => $css ] ) .
+                Tag::hRef( "javascript:stopCount{$id}()", 'Stop', [ 'id' => "stop{$id}", 'title' => 'Click here to stop the timer.','class' => $css ] ) .
+                Tag::hRef( "javascript:countDown{$id}()", 'Start', [ 'id' => "start{$id}",'title' => 'Click here to start the timer.','class' => $css ] ) .
                 '<br/>' .
-                Tag::div( [ 'id' => "reload{$id}",
-                    'class' => $css ] ) .
-                call_user_func( $callBack ) .
+                Tag::div( [ 'id' => "reload{$id}",'class' => $css ] ) .
+                    call_user_func( $callBack ) .
                 Tag::_div();
 
         return JS::library( JS::JQUERY ) .
                 JS::javaScript( $js ) .
                 $html;
     }
-
 }

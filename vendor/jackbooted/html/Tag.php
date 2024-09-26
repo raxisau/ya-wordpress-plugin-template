@@ -7,7 +7,7 @@ use \Jackbooted\Util\Invocation;
 
 /** Utilities.php - Utility functions
  *
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -117,7 +117,7 @@ class Tag extends \Jackbooted\Util\JB {
         }
 
         if ( $doubleClickProtection ) {
-            $killDblClk = "$('#{$attribs['id']} input[type=submit]').val('{$submitMsg}').attr('disabled',true);";
+            $killDblClk = "jQuery('#{$attribs['id']} input[type=submit]').val('{$submitMsg}').attr('disabled',true);";
 
             if ( isset( $attribs['onSubmit'] ) ) {
                 if ( preg_match( '/^(.*)(return true;)$/', $attribs['onSubmit'], $matches ) ) {

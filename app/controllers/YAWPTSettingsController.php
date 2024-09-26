@@ -4,9 +4,9 @@ namespace App\Controllers;
 final class YAWPTSettingsController extends \Jackbooted\Util\JB {
     const SLUG = 'yawpt';
 
-    const APIKEY    = 'api_key_0';
-    const APIURL    = 'api_url_1';
-    const TWOCHANCE = 'two_chance_1';
+    const APIKEY1    = 'api_key_0';
+    const APIURL1    = 'api_url_1';
+    const TWOCHANCE  = 'two_chance_1';
 
     private $options = null; // Cached options
     private $fields  = null; // Set up in the constructor. What fields are we saving
@@ -35,18 +35,17 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
 
         $this->pluginName = YAWPT_NAME;
 
-        // These fields set up the options that we want in this plugin
         $this->fields = [
-            self::APIKEY => [
+            self::APIKEY1 => [
                 'title'    => 'API Key',
                 'function' => function () {
-                    $this->textInput( self::APIKEY, $this->apiKey() );
+                    $this->textInput( self::APIKEY1, $this->apiKey() );
                 }
             ],
-            self::APIURL  => [
+            self::APIURL1  => [
                 'title'    => 'API URL',
                 'function' => function () {
-                    $this->textInput( self::APIURL, $this->apiUrl() );
+                    $this->textInput( self::APIURL1, $this->apiUrl() );
                 }
             ],
             self::TWOCHANCE => [
@@ -58,8 +57,8 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
         ];
 
         $this->textfields = [
-            self::APIKEY,
-            self::APIURL,
+            self::APIKEY1,
+            self::APIURL1,
         ];
         $this->checkfields = [
             self::TWOCHANCE,
@@ -80,36 +79,35 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
                     $this->genericBridge( 'Debug Information', \App\Controllers\DebugController::class );
                 },
             ],
+            '_crc' => [
+                'page_title' => 'Cron Manager',
+                'menu_title' => 'Cron Manager',
+                'callback'   => function () {
+                    $this->genericBridge( 'Cron Manager', \App\Controllers\CronController::class );
+                },
+            ],
         ];
 
         add_action( 'admin_menu', [ $this, 'addPluginPage' ] );
         add_action( 'admin_init', [ $this, 'pageInit' ] );
     }
 
-    // This is for wordpress
     public function get_plugin_name() {
         return apply_filters( 'YAWPT/settings/get_plugin_name', $this->pluginName );
     }
-
-    // ------------------------------------------------------------------
-    // GETTERS - These functions will get the option that you are interested in
     public function apiKey() {
-       $opts = $this->getOptions();
-       return ( isset( $opts[self::APIKEY] ) ) ? $opts[self::APIKEY] : '';
+        $opts = $this->getOptions();
+        return ( isset( $opts[self::APIKEY1] ) ) ? $opts[self::APIKEY1] : '';
     }
     public function apiUrl() {
         $opts = $this->getOptions();
-        return ( isset( $opts[self::APIURL] ) ) ? $opts[self::APIURL] : '';
+        return ( isset( $opts[self::APIURL1] ) ) ? $opts[self::APIURL1] : '';
     }
     public function debugMode() {
         $opts = $this->getOptions();
         return ( isset( $opts[self::TWOCHANCE] ) ) ? $opts[self::TWOCHANCE] : 'NO';
     }
-    // ------------------------------------------------------------------
 
-    // ------------------------------------------------------------------
-    // This is a utility function that will run a Jack controller in WordPress admin screen
-    // generic function that will initiate a controller
     private function genericBridge( $title, $clazz ) {
         if ( ( $jackHtml = $clazz::controller( $clazz::DEF, $clazz::ACTION ) ) === false ) {
             $jackHtml = 'No output for this item - '. $title;
@@ -121,12 +119,11 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
                 {$jackHtml}
                 </form>
             </div>
-HTML;
+        HTML;
     }
 
     /////-----------------------------------------------------------------------------------
     ///// vvvv Below this line is all standard functions and should not need to change vvvvv
-    /////-----------------------------------------------------------------------------------
     public function addPluginPage() {
         $configCallback = [ $this, 'createAdminPage' ];
 
@@ -146,7 +143,7 @@ HTML;
             <div class="wrap">
                 <h2>{$this->pageTitle}</h2>
                 <p>This is the options that you will need to communicate with {$this->pageTitle} System</p>
-HTML;
+        HTML;
         settings_errors();
         echo   '<form method="post" action="options.php">';
 
@@ -157,7 +154,7 @@ HTML;
         echo <<<HTML
                 </form>
             </div>
-HTML;
+        HTML;
     }
 
     public function pageInit() {

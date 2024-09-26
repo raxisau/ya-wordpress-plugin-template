@@ -7,7 +7,7 @@ use \Jackbooted\G;
 /**
   /** Sess.php -
  *
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -16,6 +16,10 @@ use \Jackbooted\G;
 class Sess extends \Jackbooted\Util\JB {
 
     public static function get( $key, $def = '' ) {
+        if ( !isset( $_SESSION[G::SESS] ) ) {
+            $_SESSION[G::SESS] = [];
+        }
+
         if ( !isset( $_SESSION[G::SESS][$key] ) ) {
             return $def;
         }
@@ -23,6 +27,10 @@ class Sess extends \Jackbooted\Util\JB {
     }
 
     public static function set( $key, $val ) {
+        if ( !isset( $_SESSION[G::SESS] ) ) {
+            $_SESSION[G::SESS] = [];
+        }
+
         $_SESSION[G::SESS][$key] = $val;
     }
 

@@ -12,7 +12,7 @@ use \Jackbooted\Html\Lists;
 use \Jackbooted\DB\DB;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -37,19 +37,20 @@ class ConfigManager extends WebPage {
         }
 
         $html .= Tag::table( [ 'border' => '0', 'height' => '100%', 'width' => '100%' ] ) .
-                Tag::tr() .
-                Tag::td( [ 'nowrap' => 'nowrap', 'valign' => 'top' ] ) .
-                $this->editConfigForm( $currentConfigKey ) .
-                Tag::_td() .
-                Tag::td( [ 'width' => '100%', 'valign' => 'top' ] ) .
-                $this->editJSONEditForm( $currentConfigKey ) .
-                Tag::_td() .
-                Tag::_tr() .
-                Tag::tr() .
-                Tag::td( [ 'nowrap' => 'nowrap', 'valign' => 'top', 'colspan' => 2 ] ) .
-                $this->addForm() .
-                Tag::_td() .
-                Tag::_table();
+                   Tag::tr() .
+                     Tag::td( [ 'nowrap' => 'nowrap', 'valign' => 'top' ] ) .
+                       $this->editConfigForm( $currentConfigKey ) .
+                     Tag::_td() .
+                     Tag::td( [ 'width' => '100%', 'valign' => 'top' ] ) .
+                       $this->editJSONEditForm( $currentConfigKey ) .
+                     Tag::_td() .
+                   Tag::_tr() .
+                   Tag::tr() .
+                     Tag::td( [ 'nowrap' => 'nowrap', 'valign' => 'top', 'colspan' => 2 ] ) .
+                       $this->addForm() .
+                     Tag::_td() .
+                   Tag::_tr() .
+                 Tag::_table();
 
         return $html;
     }
@@ -57,14 +58,14 @@ class ConfigManager extends WebPage {
     public function addForm() {
         $resp = MenuUtils::responseObject();
         $html = Tag::form() .
-                $resp->action( __CLASS__ . '->addFormSave()' )->toHidden() .
-                Tag::table() .
-                Tag::tr() .
-                Tag::td() . 'New Key' . Tag::_td() .
-                Tag::td() . Tag::text( 'fldCfgKey' ) . Tag::_td() .
-                Tag::td() . Tag::submit( 'Add New Key' ) . Tag::_td() .
-                Tag::_tr() .
-                Tag::_table() .
+                  $resp->action( __CLASS__ . '->addFormSave()' )->toHidden() .
+                  Tag::table() .
+                    Tag::tr() .
+                      Tag::td() . 'New Key' . Tag::_td() .
+                      Tag::td() . Tag::text( 'fldCfgKey' ) . Tag::_td() .
+                      Tag::td() . Tag::submit( 'Add New Key' ) . Tag::_td() .
+                    Tag::_tr() .
+                  Tag::_table() .
                 Tag::_form();
         return $html;
     }
@@ -73,28 +74,28 @@ class ConfigManager extends WebPage {
         Config::put( Request::get( 'fldCfgKey' ), true );
 
         return Widget::popupWrapper( 'Saved Config Item: ' . Request::get( 'fldCfgKey' ), 1000, 'Save Config Message' ) .
-                $this->index();
+               $this->index();
     }
 
     public function editConfigForm( $currentConfigKey ) {
         return JS::library( JS::JQUERY ) .
-                JS::javaScript( "$().ready( function(){ $('#fldCfgKey').focus (); });" ) .
-                Tag::hTag( 'b' ) . 'Config Keys' . Tag::_hTag( 'b' ) .
-                Tag::form( [ 'method' => 'get' ] ) .
-                        MenuUtils::responseObject()
-                        ->action( self::DEF )
-                        ->toHidden( false ) .
-                Lists::select( 'fldCfgKey', 'SELECT DISTINCT fldKey FROM tblConfig ORDER BY 1', [ 'style' => 'height: 100%',
+               JS::javaScript( "jQuery().ready( function(){ jQuery('#fldCfgKey').focus (); });" ) .
+               Tag::hTag( 'b' ) . 'Config Keys' . Tag::_hTag( 'b' ) .
+               Tag::form( [ 'method' => 'get' ] ) .
+                 MenuUtils::responseObject()->action( self::DEF )->toHidden( false ) .
+                 Lists::select( 'fldCfgKey', 'SELECT DISTINCT fldKey FROM tblConfig ORDER BY 1', [
+                    'style' => 'height: 100%',
                     'default' => $currentConfigKey,
                     'size' => 26,
                     'id' => 'fldCfgKey',
-                    'onChange' => 'submit();' ] ) .
-                Tag::_form() .
-                '<br/>' .
-                Tag::hRef( '?' . MenuUtils::responseObject()
-                                ->action( __CLASS__ . '->reload()' )
-                                ->toUrl(), 'Reload Config', [ 'title' => 'reloads the configuration',
-                    'onClick' => 'return confirm("Are You Sure you want to reload all configuration?")' ] );
+                    'onChange' => 'submit();'
+                 ]) .
+               Tag::_form() .
+               '<br/>' .
+               Tag::hRef( '?' . MenuUtils::responseObject()->action( __CLASS__ . '->reload()' )->toUrl(), 'Reload Config', [
+                   'title' => 'reloads the configuration',
+                   'onClick' => 'return confirm("Are You Sure you want to reload all configuration?")'
+               ]);
     }
 
     public function editJSONEditForm( $currentConfigKey ) {
@@ -104,24 +105,24 @@ class ConfigManager extends WebPage {
             main.load(json);
             main.resize();
             var pageDirty = false;
-            $().ready(function() {
+            jQuery().ready(function() {
                 window.onbeforeunload = function () {
                     if ( ! pageDirty ) return;
                     return 'Changes have been made on this page and will be discarded.'
                 };
-                $('textarea.jsonformatter-textarea').change( function() {
+                jQuery('textarea.jsonformatter-textarea').change( function() {
                     pageDirty = true;
                 });
-                $('div.jsoneditor-value').change( function() {
+                jQuery('div.jsoneditor-value').change( function() {
                     pageDirty = true;
                 });
-                $('#fldCfgValue').val( editor.get() );
+                jQuery('#fldCfgValue').val( editor.get() );
             });
 
             function submitClicked () {
-                var button = $('#editJSONEditFormButton').attr('disabled',true);
+                var button = jQuery('#editJSONEditFormButton').attr('disabled',true);
 
-                var orig = $('#fldCfgValue').val();
+                var orig = jQuery('#fldCfgValue').val();
                 var ed   = editor.get();    // JSON Editor, RHS fields labels
                 var form = formatter.get(); // Formatted Text Editor LHS
 
@@ -134,8 +135,8 @@ class ConfigManager extends WebPage {
                 else if ( orig != ed && orig == form ) {
                     if ( confirm( 'Looks like you have made changes in the JSON Editor on right pane and not copied to Formatted Text Editor on left pane. Ok to save changes?' ) ) {
                         pageDirty = false;
-                        $('#fldCfgValue').val( ed );
-                        $('#editJSONEditForm').submit();
+                        jQuery('#fldCfgValue').val( ed );
+                        jQuery('#editJSONEditForm').submit();
                         return true;
                     }
                     else {
@@ -146,8 +147,8 @@ class ConfigManager extends WebPage {
                 else if ( orig == ed && orig != form ) {
                     if ( confirm( 'Looks like you have made changes in the Formatted Text Editor on left pane and not copied to the JSON Editor on right pane. Ok to save?' ) ) {
                         pageDirty = false;
-                        $('#fldCfgValue').val( form );
-                        $('#editJSONEditForm').submit();
+                        jQuery('#fldCfgValue').val( form );
+                        jQuery('#editJSONEditForm').submit();
                         return true;
                     }
                     else {
@@ -158,8 +159,8 @@ class ConfigManager extends WebPage {
                 else if ( orig != ed && orig != form ) {
                     if ( ed == form ) {
                         pageDirty = false;
-                        $('#fldCfgValue').val( ed );
-                        $('#editJSONEditForm').submit();
+                        jQuery('#fldCfgValue').val( ed );
+                        jQuery('#editJSONEditForm').submit();
                         return true;
                     }
                     else {
@@ -171,68 +172,63 @@ class ConfigManager extends WebPage {
                 }
             }
 
-            $('body')
+            jQuery('body')
                 .on( 'focus', '[contenteditable]', function() {
-                    var t = $(this);
+                    var t = jQuery(this);
                     t.data('before', t.html());
                     return t;
                 })
                 .on( 'blur keyup paste input', '[contenteditable]', function() {
-                    var t = $(this);
+                    var t = jQuery(this);
                     if (t.data('before') !== t.html() ) {
                         t.data('before', t.html());
                         t.trigger('change');
                     }
                     return t;
                 });
-JS;
+        JS;
         return JS::library( JS::JQUERY ) .
-                JS::library( 'jsoneditor.css' ) .
-                JS::library( 'interface.css' ) .
-                JS::library( 'jsoneditor.js' ) .
-                JS::library( 'interface.js' ) .
-                Tag::div( [ 'id' => 'auto' ] ) .
-                Tag::div( [ 'id' => 'contents', 'height' => '100%' ] ) .
-                Tag::table( [ 'border' => '0', 'height' => '100%', 'width' => '100%' ] ) .
-                Tag::tr() .
-                Tag::td( [ 'valign' => 'top', 'width' => '45%', 'height' => '100%' ] ) .
-                Tag::hTag( 'b' ) . '&nbsp;&nbsp;&nbsp;&nbsp;Formatted Text Editor' . Tag::_hTag( 'b' ) .
-                Tag::div( [ 'id' => 'jsonformatter' ] ) . Tag::_div() .
-                Tag::_td() .
-                Tag::td( [ 'valign' => 'top', 'width' => '10%', 'align' => 'center' ] ) .
-                Tag::div( [ 'id' => 'splitter' ] ) . Tag::_div() .
-                Tag::_td() .
-                Tag::td( [ 'valign' => 'top', 'width' => '45%', 'height' => '100%' ] ) .
-                Tag::hTag( 'b' ) . '&nbsp;&nbsp;&nbsp;&nbsp;JSON Editor' . Tag::_hTag( 'b' ) .
-                Tag::div( [ 'id' => 'jsoneditor' ] ) . Tag::_div() .
-                Tag::_td() .
-                Tag::_tr() .
-                Tag::_table() .
-                Tag::_div() .
-                Tag::_div() .
-                Tag::form( [ 'id' => 'editJSONEditForm' ], false ) . // No doubleclick protection. will handle it ourselves
-                        MenuUtils::responseObject()
-                        ->set( 'fldCfgKey', $currentConfigKey )
-                        ->action( __CLASS__ . '->saveConfig()' )
-                        ->toHidden() .
-                Tag::textArea( 'fldCfgValue', '', [ 'id' => 'fldCfgValue', 'style' => 'display: none;' ] ) .
-                '<b>Currently editing : <i>' . $currentConfigKey . '</i></b> ' .
-                Tag::button( 'Save', [ 'onClick' => 'submitClicked();', 'id' => 'editJSONEditFormButton' ] ) .
-                Tag::_form() .
-                JS::javaScript( $js );
+               JS::library( 'jsoneditor.css' ) .
+               JS::library( 'interface.css' ) .
+               JS::library( 'jsoneditor.js' ) .
+               JS::library( 'interface.js' ) .
+               Tag::div( [ 'id' => 'auto' ] ) .
+                 Tag::div( [ 'id' => 'contents', 'height' => '100%' ] ) .
+                   Tag::table( [ 'border' => '0', 'height' => '100%', 'width' => '100%' ] ) .
+                     Tag::tr() .
+                       Tag::td( [ 'valign' => 'top', 'width' => '45%', 'height' => '100%' ] ) .
+                         Tag::hTag( 'b' ) . '&nbsp;&nbsp;&nbsp;&nbsp;Formatted Text Editor' . Tag::_hTag( 'b' ) .
+                         Tag::div( [ 'id' => 'jsonformatter' ] ) . Tag::_div() .
+                       Tag::_td() .
+                       Tag::td( [ 'valign' => 'top', 'width' => '10%', 'align' => 'center' ] ) .
+                         Tag::div( [ 'id' => 'splitter' ] ) . Tag::_div() .
+                       Tag::_td() .
+                       Tag::td( [ 'valign' => 'top', 'width' => '45%', 'height' => '100%' ] ) .
+                         Tag::hTag( 'b' ) . '&nbsp;&nbsp;&nbsp;&nbsp;JSON Editor' . Tag::_hTag( 'b' ) .
+                         Tag::div( [ 'id' => 'jsoneditor' ] ) . Tag::_div() .
+                       Tag::_td() .
+                     Tag::_tr() .
+                   Tag::_table() .
+                 Tag::_div() .
+               Tag::_div() .
+               Tag::form( [ 'id' => 'editJSONEditForm' ], false ) . // No doubleclick protection. will handle it ourselves
+                 MenuUtils::responseObject()->set( 'fldCfgKey', $currentConfigKey )->action( __CLASS__ . '->saveConfig()' )->toHidden() .
+                 Tag::textArea( 'fldCfgValue', '', [ 'id' => 'fldCfgValue', 'style' => 'display: none;' ] ) .
+                 '<b>Currently editing : <i>' . $currentConfigKey . '</i></b> ' .
+                 Tag::button( 'Save', [ 'onClick' => 'submitClicked();', 'id' => 'editJSONEditFormButton' ] ) .
+               Tag::_form() .
+               JS::javaScript( $js );
     }
 
     public function saveConfig() {
         Config::put( Request::get( 'fldCfgKey' ), Request::get( 'fldCfgValue' ) );
 
         return Widget::popupWrapper( 'Saved Config Item: ' . Request::get( 'fldCfgKey' ), 1000, 'Save Config Message' ) .
-                $this->index();
+               $this->index();
     }
 
     public function reload() {
         Config::clearCache();
-        Widget::popupWrapper( 'Sucessfully reloaded the config', 1000, 'Reload' ) .
-                $this->index();
+        Widget::popupWrapper( 'Sucessfully reloaded the config', 1000, 'Reload' ) . $this->index();
     }
-
 }

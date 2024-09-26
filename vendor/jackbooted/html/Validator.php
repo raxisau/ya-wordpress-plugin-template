@@ -5,7 +5,7 @@ namespace Jackbooted\Html;
 use \Jackbooted\Util\Invocation;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -71,9 +71,9 @@ use \Jackbooted\Util\Invocation;
  * $val-&gt;addExists( 'Copy1', 'Copy 1 descr' );
  * $val-&gt;add24HrTime( '24HR', 'Time needs to be HH:MM' );
  * $html = $val-&gt;toHtml();
- * echo '&lt;a href=&quot;javascript:void(0)&quot; onclick=&quot;$(\'#code\').toggle()&quot;&gt;Hide/Show Javascript Output&lt;/a&gt;&lt;br/&gt;';
+ * echo '&lt;a href=&quot;javascript:void(0)&quot; onclick=&quot;jQuery(\'#code\').toggle()&quot;&gt;Hide/Show Javascript Output&lt;/a&gt;&lt;br/&gt;';
  * echo '&lt;div id=&quot;code&quot; style=&quot;display:none&quot;&gt;&lt;pre&gt;' . htmlspecialchars( $html ) . '&lt;/pre&gt;&lt;/div&gt;';
- * echo '&lt;a href=&quot;javascript:void(0)&quot; onclick=&quot;$(\'#vars\').toggle()&quot;&gt;Hide/Show GET Variables&lt;/a&gt;&lt;br/&gt;';
+ * echo '&lt;a href=&quot;javascript:void(0)&quot; onclick=&quot;jQuery(\'#vars\').toggle()&quot;&gt;Hide/Show GET Variables&lt;/a&gt;&lt;br/&gt;';
  * if ( count ( $_GET ) &gt; 0 ) {
  *     echo '&lt;div id=&quot;vars&quot; style=&quot;display:none&quot;&gt;&lt;pre&gt;';
  *     print_r( $_GET );
@@ -475,7 +475,7 @@ class Validator extends \Jackbooted\Util\JB {
 
         $msg .= sprintf( $this->validateFunctionJS, $this->formName );
         return JS::library( JS::JQUERY ) .
-                JS::javaScript( $msg );
+               JS::javaScript( $msg );
     }
 
     private function createCaseJSTests( $val, $xtra, $desc ) {
@@ -618,230 +618,228 @@ class Validator extends \Jackbooted\Util\JB {
 
     private function setUpJavaScriptFunctions() {
         $this->headerJS = <<<JS
-function isEmpty{$this->id}( s ) {
-    return ( ( s == null ) || ( s.length == 0 ) );
-}
-var whitespace{$this->id} = " \\t\\n\\r";
-function isWhitespace{$this->id} ( s ) {
-    var i;
-    if ( isEmpty{$this->id}( s ) ) return true;
-    for ( i=0; i<s.length; i++ ) {
-        var c = s.charAt( i );
-        if ( whitespace{$this->id}.indexOf( c ) == -1 ) return false;
-    }
-    return true;
-}
+            function isEmpty{$this->id}( s ) {
+                return ( ( s == null ) || ( s.length == 0 ) );
+            }
+            var whitespace{$this->id} = " \\t\\n\\r";
+            function isWhitespace{$this->id} ( s ) {
+                var i;
+                if ( isEmpty{$this->id}( s ) ) return true;
+                for ( i=0; i<s.length; i++ ) {
+                    var c = s.charAt( i );
+                    if ( whitespace{$this->id}.indexOf( c ) == -1 ) return false;
+                }
+                return true;
+            }
+        JS;
 
-JS;
         $this->existsJS = <<<JS
-function doesExist{$this->id} ( s ) {
-    return ( ! isEmpty{$this->id}( s ) && ! isWhitespace{$this->id} ( s ) );
-}
+            function doesExist{$this->id} ( s ) {
+                return ( ! isEmpty{$this->id}( s ) && ! isWhitespace{$this->id} ( s ) );
+            }
 
-JS;
+        JS;
+
         $this->emailJS = <<<JS
-function isEmail{$this->id} ( s ) {
-    if ( isEmpty{$this->id}( s ) ) return true;
-    if ( isWhitespace{$this->id}( s ) ) return false;
-    var i = 1;
-    var sLength = s.length;
-    while ( ( i < sLength ) && ( s.charAt( i ) != "@" ) ) i++;
-    if ( ( i >= sLength ) || ( s.charAt( i ) != "@" ) ) return false;
-    else i += 2;
-    while ( ( i < sLength ) && ( s.charAt( i ) != "." ) ) i++;
-    if ( ( i >= sLength - 1 ) || ( s.charAt( i ) != "." ) ) return false;
-    else return true;
-}
+            function isEmail{$this->id} ( s ) {
+                if ( isEmpty{$this->id}( s ) ) return true;
+                if ( isWhitespace{$this->id}( s ) ) return false;
+                var i = 1;
+                var sLength = s.length;
+                while ( ( i < sLength ) && ( s.charAt( i ) != "@" ) ) i++;
+                if ( ( i >= sLength ) || ( s.charAt( i ) != "@" ) ) return false;
+                else i += 2;
+                while ( ( i < sLength ) && ( s.charAt( i ) != "." ) ) i++;
+                if ( ( i >= sLength - 1 ) || ( s.charAt( i ) != "." ) ) return false;
+                else return true;
+            }
+        JS;
 
-JS;
         $this->integerJS = <<<JS
-function isDigit{$this->id}( num ) {
-    if ( num.length > 1 ) return false;
-    var string = "1234567890";
-    if ( string.indexOf( num ) != -1) return true;
-    return false;
-}
-function isInteger{$this->id}( val ) {
-    var ok;
-    for ( var i=0; i<val.length; i++ ) {
-        var ch = val.charAt( i );
-        if ( ( i == 0 ) && ( ch == '+' || ch == '-' ) ) ok = true;
-        else if ( isDigit{$this->id} ( ch ) ) ok = true;
-        else {
-            return false;
-        }
-    }
-    return true;
-}
+            function isDigit{$this->id}( num ) {
+                if ( num.length > 1 ) return false;
+                var string = "1234567890";
+                if ( string.indexOf( num ) != -1) return true;
+                return false;
+            }
+            function isInteger{$this->id}( val ) {
+                var ok;
+                for ( var i=0; i<val.length; i++ ) {
+                    var ch = val.charAt( i );
+                    if ( ( i == 0 ) && ( ch == '+' || ch == '-' ) ) ok = true;
+                    else if ( isDigit{$this->id} ( ch ) ) ok = true;
+                    else {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        JS;
 
-JS;
         $this->validateHeaderJS = <<<JS
-function validateForm{$this->id}() {
-    var formName='%s';
+            function validateForm{$this->id}() {
+                var formName='%s';
+        JS;
 
-JS;
         $this->testCaseHeaderJS = <<<JS
-    var fieldName = '%s';
-    var element = $('form[name=' + formName + '] input[name=' + fieldName + ']');
-    if ( element.length == 1 ) {
+                var fieldName = '%s';
+                var element = jQuery('form[name=' + formName + '] input[name=' + fieldName + ']');
+                if ( element.length == 1 ) {
+        JS;
 
-JS;
         $this->caseExistsJS = <<<JS
-        if ( ! doesExist{$this->id} ( element.val() ) ) {
-            alert ( "%s" );
-            element.focus();
-            return false;
-        }
+                if ( ! doesExist{$this->id} ( element.val() ) ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
 
-JS;
         $this->caseLenEqJS = <<<JS
-        if ( ! ( ( element.val().length == 0 && %s ) || element.val().length == %s ) ) {
-            alert ( "%s" );
-            element.focus();
-            return false;
-        }
+                if ( ! ( ( element.val().length == 0 && %s ) || element.val().length == %s ) ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
 
-JS;
         $this->caseLenBetweenJS = <<<JS
-        if ( ! ( ( element.val().length == 0 && %s ) || ( element.val().length >= %s && element.val().length <= %s ) ) ) {
-            alert ( "%s" );
-            element.focus();
-            return false;
-        }
+                if ( ! ( ( element.val().length == 0 && %s ) || ( element.val().length >= %s && element.val().length <= %s ) ) ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
 
-JS;
         $this->caseLenGTJS = <<<JS
-        if ( ! ( ( element.val().length == 0 && %s ) || element.val().length >= %s ) ) {
-            alert ( "%s" );
-            element.focus();
-            return false;
-        }
+                if ( ! ( ( element.val().length == 0 && %s ) || element.val().length >= %s ) ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
 
-JS;
         $this->caseLenLTJS = <<<JS
-        if ( ! ( ( element.val().length == 0 && %s ) || element.val().length <= %s ) ) {
-            alert ( "%s" );
-            element.focus();
-            return false;
-        }
+                if ( ! ( ( element.val().length == 0 && %s ) || element.val().length <= %s ) ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
 
-JS;
         $this->caseIntegerJS = <<<JS
-        if ( ! isInteger{$this->id} ( element.val() ) ) {
-            alert ( "%s" );
-            element.focus();
-            return false ;
-        }
+                if ( ! isInteger{$this->id} ( element.val() ) ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false ;
+                }
+        JS;
 
-JS;
         $this->caseRangeBetweenJS = <<<JS
-        if ( ! isEmpty{$this->id} ( element.val() ) ) {
-            if ( parseInt ( element.val() ) < %s || parseInt ( element.val() ) > %s ) {
-                alert ( "%s" );
-                element.focus();
-                return false;
-            }
-        }
+                if ( ! isEmpty{$this->id} ( element.val() ) ) {
+                    if ( parseInt ( element.val() ) < %s || parseInt ( element.val() ) > %s ) {
+                        alert ( "%s" );
+                        element.focus();
+                        return false;
+                    }
+                }
+        JS;
 
-JS;
         $this->caseRangeGTJS = <<<JS
-        if ( ! isEmpty{$this->id} ( element.val() ) ) {
-            if ( parseInt ( element.val() ) < %s ) {
-                alert ( "%s" );
-                element.focus();
-                return ( false );
-            }
-        }
+                if ( ! isEmpty{$this->id} ( element.val() ) ) {
+                    if ( parseInt ( element.val() ) < %s ) {
+                        alert ( "%s" );
+                        element.focus();
+                        return ( false );
+                    }
+                }
+        JS;
 
-JS;
         $this->caseRangeLTJS = <<<JS
-        if ( ! isEmpty{$this->id} ( element.val() ) ) {
-            if ( parseInt ( element.val() ) > %s ) {
-                alert ( "%s" );
-                element.focus();
+                if ( ! isEmpty{$this->id} ( element.val() ) ) {
+                    if ( parseInt ( element.val() ) > %s ) {
+                        alert ( "%s" );
+                        element.focus();
+                        return false;
+                    }
+                }
+        JS;
+
+        $this->caseEmailJS = <<<JS
+                if ( ! isEmail{$this->id} ( element.val() ) ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
+
+        $this->caseEqualJS = <<<JS
+                var fieldName2='%s';
+                var element2 = jQuery('form[name=' + formName + '] input[name=' + fieldName2 + ']');
+                if ( element.val() != element2.val() ) {
+                    alert ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
+
+        $this->caseCopyJS = <<<JS
+                var fieldName2 = '%s';
+                var element2 = jQuery('form[name=' + formName + '] input[name=' + fieldName2 + ']');
+                if ( ! doesExist{$this->id} ( element2.val() ) ) {
+                    element2.val( element.val() );
+                }
+        JS;
+
+        $this->validateFooterJS = <<<JS
+            }
+        JS;
+
+        $this->caseAlertMissingJS = <<<JS
+            else {
+                alert ( "Form variable '%s' does not exist in this form" );
                 return false;
             }
-        }
+        JS;
 
-JS;
-        $this->caseEmailJS = <<<JS
-        if ( ! isEmail{$this->id} ( element.val() ) ) {
-            alert ( "%s" );
-            element.focus();
-            return false;
-        }
-
-JS;
-        $this->caseEqualJS = <<<JS
-        var fieldName2='%s';
-        var element2 = $('form[name=' + formName + '] input[name=' + fieldName2 + ']');
-        if ( element.val() != element2.val() ) {
-            alert ( "%s" );
-            element.focus();
-            return false;
-        }
-
-JS;
-        $this->caseCopyJS = <<<JS
-        var fieldName2 = '%s';
-        var element2 = $('form[name=' + formName + '] input[name=' + fieldName2 + ']');
-        if ( ! doesExist{$this->id} ( element2.val() ) ) {
-            element2.val( element.val() );
-        }
-
-JS;
-        $this->validateFooterJS = <<<JS
-    }
-
-JS;
-        $this->caseAlertMissingJS = <<<JS
-    else {
-        alert ( "Form variable '%s' does not exist in this form" );
-        return false;
-    }
-
-JS;
         $this->validateFunctionJS = <<<JS
-    return true;
-}
+                return true;
+            }
+        JS;
 
-JS;
         $this->case24HrTimeJS = <<<JS
-        if ( ! is24HrTime{$this->id} ( element.val() ) ) {
-            alert ( "%s" );
-            if ( "%s" != "" ) element.val ( "%s" );
-            element.focus();
-            return false;
-        }
+                if ( ! is24HrTime{$this->id} ( element.val() ) ) {
+                    alert ( "%s" );
+                    if ( "%s" != "" ) element.val ( "%s" );
+                    element.focus();
+                    return false;
+                }
+        JS;
 
-JS;
         $this->t24HrTimeJS = <<<JS
-function is24HrTime{$this->id} ( s ) {
-    s = $.trim ( s );
-    if ( s.length == 0 ) return true;
-    if ( s.length != 5 ) return false;
-    var parts = s.split ( ':' );
-    if ( parts.length != 2 ) return false;
-    if ( ! isInteger{$this->id} ( parts[0] ) ) return false;
-    if ( ! isInteger{$this->id} ( parts[1] ) ) return false;
-    var hrs = parseInt ( parts[0] );
-    var min = parseInt ( parts[1] );
-    if ( hrs < 0 || hrs > 23 || min < 0 || min > 60 ) return false;
-    return true;
-}
-
-JS;
+            function is24HrTime{$this->id} ( s ) {
+                s = $.trim ( s );
+                if ( s.length == 0 ) return true;
+                if ( s.length != 5 ) return false;
+                var parts = s.split ( ':' );
+                if ( parts.length != 2 ) return false;
+                if ( ! isInteger{$this->id} ( parts[0] ) ) return false;
+                if ( ! isInteger{$this->id} ( parts[1] ) ) return false;
+                var hrs = parseInt ( parts[0] );
+                var min = parseInt ( parts[1] );
+                if ( hrs < 0 || hrs > 23 || min < 0 || min > 60 ) return false;
+                return true;
+            }
+        JS;
 
         $this->caseMySQLDateTimeJS = <<<JS
-        if ( ! isEmpty{$this->id}( element.val() ) ) {
-            if ( isNaN( Date.parse( element.val().substring(0, 10) + "T" + element.val().substring(11) ) ) ) {
-                alert ( "%s" );
-                element.focus();
-                return false;
-            }
-        }
-
-JS;
+                if ( ! isEmpty{$this->id}( element.val() ) ) {
+                    if ( isNaN( Date.parse( element.val().substring(0, 10) + "T" + element.val().substring(11) ) ) ) {
+                        alert ( "%s" );
+                        element.focus();
+                        return false;
+                    }
+                }
+        JS;
     }
-
 }

@@ -2,7 +2,7 @@
 namespace Jackbooted\Html;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -31,7 +31,7 @@ class WebPage extends \Jackbooted\Util\JB {
         return self::execAction( $action );
     }
 
-    protected static function execAction( $action ) {
+    public static function execAction( $action ) {
         if ( strpos( $action, '::' ) !== false ) {
             list ( $clazz, $rest ) = explode( '::', $action );
             list ( $className, $functionName ) = self::normalizeCall( $clazz, $rest );
@@ -56,7 +56,7 @@ class WebPage extends \Jackbooted\Util\JB {
         return $html;
     }
 
-    private static function normalizeCall( $clazz, $rest ) {
+    public static function normalizeCall( $clazz, $rest ) {
         $className = str_replace( '\\\\', '\\', $clazz );
         if ( ( $idx = strpos( $rest, '(' ) ) !== false ) {
             $functionName = trim( substr( $rest, 0, $idx ) );
@@ -72,7 +72,7 @@ class WebPage extends \Jackbooted\Util\JB {
     }
 
     public function index() {
-        return '<pre>' . var_export( $_REQUEST, false ) . '</pre>';
+        return '<pre>' . __METHOD__ . ' => ' .var_export( $_REQUEST, false ) . '</pre>';
     }
 
     public function blank() {
