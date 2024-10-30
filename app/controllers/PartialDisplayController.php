@@ -6,11 +6,7 @@ use \Jackbooted\Forms\Request;
 class PartialDisplayController extends BaseController {
     const DEF       = '\App\Controllers\PartialDisplayController->index()';
     const ACTION    = '_PD_ACT';
-<<<<<<< HEAD
-    const SHORTCODE = 'yawpt-partial';
-=======
-    const SHORTCODE = 'dhu-partial';
->>>>>>> c4603745f972612d468c25a7efff3bb37c782d6f
+    const SHORTCODE = 'ya-partial';
 
     public function __construct () {
         parent::__construct();
