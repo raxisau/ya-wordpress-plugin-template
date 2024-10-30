@@ -93,7 +93,7 @@ class MaintenanceCLI extends BaseCLI {
     public function shortcodes() {
         $results = new CLIResult();
 
-        $settings = \App\Controllers\ORWController::instance();
+        $settings = \App\Controllers\YAWPTController::instance();
         $results->success( $settings::$shortCodeList );
 
         return $results->JSON();
