@@ -74,17 +74,39 @@ tree .
 ├── ajax.php
 ├── app
 │   ├── App.php
+│   ├── api
+│   │   └── APIResult.php
+│   ├── commands
+│   │   ├── BaseCLI.php
+│   │   ├── CLI.php
+│   │   ├── CLIResult.php
+│   │   ├── CronCLI.php
+│   │   ├── CurrencyCLI.php
+│   │   ├── InstallationCLI.php
+│   │   ├── JobsCLI.php
+│   │   └── MaintenanceCLI.php
 │   ├── controllers
 │   │   ├── BaseController.php
+│   │   ├── CommonAjaxEndpoints.php
+│   │   ├── CronController.php
 │   │   ├── DebugController.php
+│   │   ├── GeoIPController.php
+│   │   ├── PartialDisplayController.php
 │   │   ├── PartialEditController.php
+│   │   ├── UpdateRatesController.php
 │   │   ├── YAWPTController.php
 │   │   └── YAWPTSettingsController.php
 │   ├── libraries
+│   │   ├── IPGeolocationAPI.php
 │   │   ├── RestAPI.php
 │   │   └── Validate.php
 │   └── models
-│       └── Mutex.php
+│       ├── JobLog.php
+│       ├── MailData.php
+│       ├── Mutex.php
+│       ├── Options.php
+│       ├── RegistrarLog.php
+│       └── TblCurrencies.php
 ├── assets
 │   ├── custom.js
 │   ├── fontawesome-all.min.css
@@ -93,7 +115,11 @@ tree .
 ├── build.sh
 ├── config.env.php
 ├── config.php
+├── doc
+│   └── README.md
 ├── incver.php
+├── jack.php
+├── job.sh
 ├── languages
 │   └── index.php
 ├── partials
@@ -110,6 +136,7 @@ tree .
 │       ├── 3rdparty
 │       ├── admin
 │       ├── config
+│       ├── cron
 │       ├── db
 │       ├── forms
 │       ├── html
