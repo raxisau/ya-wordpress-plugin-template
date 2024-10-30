@@ -104,15 +104,15 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
     }
     public function apiKey() {
         $opts = $this->getOptions();
-        return ( isset( $opts[self::APIKEY1] ) ) ? $opts[self::APIKEY1] : '';
+        return $opts[self::APIKEY1] ?? '';
     }
     public function apiUrl() {
         $opts = $this->getOptions();
-        return ( isset( $opts[self::APIURL1] ) ) ? $opts[self::APIURL1] : '';
+        return $opts[self::APIURL1] ?? '';
     }
     public function debugMode() {
         $opts = $this->getOptions();
-        return ( isset( $opts[self::DEBUG_FLAG] ) ) ? $opts[self::DEBUG_FLAG] : 'NO';
+        return ( $opts[self::DEBUG_FLAG] ?? 'NO' ) == 'YES';
     }
 
     private function genericBridge( $title, $clazz ) {

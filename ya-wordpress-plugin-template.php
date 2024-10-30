@@ -4,13 +4,13 @@
  *
  * @package       YAWPT
  * @author        Brett Dutton
- * @version       1.0.6
+ * @version       1.0.7
  *
  * @wordpress-plugin
  * Plugin Name:   Yet Another Wordpress Plugin Template
  * Plugin URI:    https://brettdutton.com
  * Description:   Shortcodes that help with any product that you see fit to run
- * Version:       1.0.6
+ * Version:       1.0.7
  * Author:        Brett Dutton
  * Author URI:    https://b2bconsultancy.asia
  * Text Domain:   ya-wordpress-plugin-template
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/config.php';
 
 define( 'YAWPT_NAME',        'Yet Another Wordpress Plugin Template' );
-define( 'YAWPT_VERSION',     '1.0.6' );
+define( 'YAWPT_VERSION',     '1.0.7' );
 define( 'YAWPT_PLUGIN_FILE', __FILE__ );
 define( 'YAWPT_SLUG',        basename( __FILE__, '.php' ) );
 
