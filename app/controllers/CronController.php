@@ -4,7 +4,7 @@ namespace App\Controllers;
 class CronController extends BaseController {
     const DEF       = '\App\Controllers\CronController->index()';
     const ACTION    = '_CRC_ACT';
-    const SHORTCODE = 'yawpt-cron';
+    const SHORTCODE = 'ya-cron';
 
     public function __construct () {
         parent::__construct();

@@ -4,7 +4,7 @@ namespace App\Controllers;
 class DebugController extends BaseController {
     const DEF       = '\App\Controllers\DebugController->index()';
     const ACTION    = '_DBG_ACT';
-    const SHORTCODE = 'yawpt-debug';
+    const SHORTCODE = 'ya-debug';
 
     public function __construct () {
         parent::__construct();

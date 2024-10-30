@@ -6,7 +6,11 @@ use \Jackbooted\Html\Tag;
 class GeoIPController extends BaseController {
     const DEF       = '\App\Controllers\GeoIPController->index()';
     const ACTION    = '_GI_ACT';
+<<<<<<< HEAD
     const SHORTCODE = 'yawpt-geoip';
+=======
+    const SHORTCODE = 'ya-geoip';
+>>>>>>> c4603745f972612d468c25a7efff3bb37c782d6f
 
     public function __construct () {
         parent::__construct();

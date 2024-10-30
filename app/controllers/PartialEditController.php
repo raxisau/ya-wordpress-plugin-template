@@ -8,7 +8,7 @@ use \Jackbooted\Forms\Request;
 class PartialEditController extends BaseController {
     const DEF       = '\App\Controllers\PartialEditController->index()';
     const ACTION    = '_PE_ACT';
-    const SHORTCODE = 'yawpt-partials';
+    const SHORTCODE = 'ya-partials';
 
     public function __construct () {
         parent::__construct();

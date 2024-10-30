@@ -39,13 +39,13 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
             self::APIKEY1 => [
                 'title'    => 'API Key',
                 'function' => function () {
-                    $this->textInput( self::APIKEY1, $this->apiKeyDC() );
+                    $this->textInput( self::APIKEY1, $this->apiKey() );
                 }
             ],
             self::APIURL1  => [
                 'title'    => 'API URL',
                 'function' => function () {
-                    $this->textInput( self::APIURL1, $this->apiUrlDC() );
+                    $this->textInput( self::APIURL1, $this->apiUrl() );
                 }
             ],
             self::DEBUG_FLAG => [
@@ -112,7 +112,7 @@ final class YAWPTSettingsController extends \Jackbooted\Util\JB {
     }
     public function debugMode() {
         $opts = $this->getOptions();
-        return ( isset( $opts[self::TWOCHANCE] ) ) ? $opts[self::TWOCHANCE] : 'NO';
+        return ( isset( $opts[self::DEBUG_FLAG] ) ) ? $opts[self::DEBUG_FLAG] : 'NO';
     }
 
     private function genericBridge( $title, $clazz ) {
