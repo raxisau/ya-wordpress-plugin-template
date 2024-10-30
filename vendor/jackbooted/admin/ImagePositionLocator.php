@@ -10,7 +10,7 @@ use \Jackbooted\Html\Tag;
 use \Jackbooted\Html\WebPage;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -31,29 +31,29 @@ class ImagePositionLocator extends WebPage {
         $url = Request::get( 'url' );
 
         $jQuery = <<<JS
-    var currentXPos = 0;
-    var currentYPos = 0;
-    var IE = document.all?true:false
-    if (!IE) document.captureEvents(Event.MOUSEMOVE);
-    document.onmousemove = getMouseXY;
-    function getMouseXY(e) {
-        if (IE) { // grab the x-y pos.s if browser is IE
-            currentXPos = event.clientX + document.body.scrollLeft;
-            currentYPos = event.clientY + document.body.scrollTop;
-        } else {  // grab the x-y pos.s if browser is NS
-            currentXPos = e.pageX;
-            currentYPos = e.pageY;
-        }
-        if (currentXPos < 0) currentXPos = 0;
-        if (currentYPos < 0) currentYPos = 0;
-        return true;
-    }
-    function movePinToCursor () {
-       var offs = $('#baseImage').offset();
-       $('#PinTop').attr ( 'value', '' + parseInt ( currentYPos - offs.top ) );
-       $('#PinLeft').attr ( 'value', '' + parseInt ( currentXPos - offs.left ) );
-    }
-JS;
+            var currentXPos = 0;
+            var currentYPos = 0;
+            var IE = document.all?true:false
+            if (!IE) document.captureEvents(Event.MOUSEMOVE);
+            document.onmousemove = getMouseXY;
+            function getMouseXY(e) {
+                if (IE) { // grab the x-y pos.s if browser is IE
+                    currentXPos = event.clientX + document.body.scrollLeft;
+                    currentYPos = event.clientY + document.body.scrollTop;
+                } else {  // grab the x-y pos.s if browser is NS
+                    currentXPos = e.pageX;
+                    currentYPos = e.pageY;
+                }
+                if (currentXPos < 0) currentXPos = 0;
+                if (currentYPos < 0) currentYPos = 0;
+                return true;
+            }
+            function movePinToCursor () {
+               var offs = jQuery('#baseImage').offset();
+               jQuery('#PinTop').attr ( 'value', '' + parseInt ( currentYPos - offs.top ) );
+               jQuery('#PinLeft').attr ( 'value', '' + parseInt ( currentXPos - offs.left ) );
+            }
+        JS;
 
         $html .= JS::javaScript( $jQuery );
 
@@ -109,5 +109,4 @@ JS;
 
         return $html;
     }
-
 }

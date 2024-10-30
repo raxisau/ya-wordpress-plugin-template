@@ -13,7 +13,7 @@ use \Jackbooted\Util\Invocation;
 use \Jackbooted\Util\Log4PHP;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -123,13 +123,13 @@ class DBEdit extends \Jackbooted\Util\JB {
         }
 
         $listSelect = Lists::select ( $this->daoObject->primaryKey, $sql,
-                                      [ 'size' => $this->displayRows,'onClick' => 'submit();', 'default' => $id ] );
+                                      [ 'size' => $this->displayRows,'onClick' => 'submit();', 'default' => $id, 'DB' => $this->db ] );
 
         $html = Tag::table( array_merge( [ 'id' => 'DBEdit' . $this->suffix ], $this->styles[self::TABLE_C] ) ) .
                   Tag::tr() .
                     Tag::td( ['valign' => 'top'] ) .
                       '<H4>Click on item</h4>' .
-                      Tag::form( [ 'method' => 'get' ] ) .
+                      Tag::form( [ 'action' => $this->formAction ] ) .
                         $this->resp->set( $this->action, 'dummyClick' )->toHidden ( false ) .
                         $listSelect .
                       Tag::_form () .
@@ -139,10 +139,11 @@ class DBEdit extends \Jackbooted\Util\JB {
                     Tag::_td() .
                   Tag::_tr();
         if ( $this->canInsert ) {
+            $sep = ( $this->formAction == '?' ) ? '' : '&';
             $html .=
                   Tag::tr() .
                     Tag::td( ['colspan' => '10'] ) .
-                      Tag::linkButton( $this->formAction . $this->resp->set( $this->action, 'insertBlank' )->toUrl(), 'Insert Blank' ) .
+                      Tag::linkButton( $this->formAction . $sep . $this->resp->set( $this->action, 'insertBlank' )->toUrl(), 'Insert Blank' ) .
                     Tag::_td() .
                   Tag::_tr();
         }
@@ -175,7 +176,7 @@ class DBEdit extends \Jackbooted\Util\JB {
 
         $resp = $this->resp->set( $this->daoObject->primaryKey, $id );
 
-        $html = Tag::form() .
+        $html = Tag::form( [ 'action' => $this->formAction ] ) .
                   $resp->set( $this->action, 'save' )->toHidden( ) .
                   Tag::table();
 
@@ -186,12 +187,15 @@ class DBEdit extends \Jackbooted\Util\JB {
         $html .=    Tag::tr() .
                       Tag::td([ 'colspan' => 10]) .
                         Tag::submit( 'Save' );
+
+        $sep = ( $this->formAction == '?' ) ? '' : '&';
         if ( $this->canInsert ) {
-            $html .=    Tag::linkButton( $this->formAction . $this->resp->set( $this->action, 'dup' )->toUrl(), 'Dup' );
+            $html .=    Tag::linkButton( $this->formAction . $sep . $this->resp->set( $this->action, 'dup' )->toUrl(), 'Dup' );
         }
         if ( $this->canDelete ) {
-            $html .=    Tag::linkButton( $this->formAction . $this->resp->set( $this->action, 'del' )->toUrl(), 'Del' );
+            $html .=    Tag::linkButton( $this->formAction . $sep . $this->resp->set( $this->action, 'del' )->toUrl(), 'Del' );
         }
+
         $html .=      Tag::_td() .
                     Tag::_tr() .
                   Tag::_table() .
@@ -223,6 +227,8 @@ class DBEdit extends \Jackbooted\Util\JB {
             case self::RADIO:
                 $dispList = ( isset( $this->displayType[$colName][1] ) ) ? $this->displayType[$colName][1] : null;
                 $updCheckAttrib['default'] = $value;
+                $updCheckAttrib['DB'] = $this->db;
+
                 $html .= Tag::table() .
                            Tag::tr() .
                              Tag::td( [ 'nowrap' => 'nowrap' ] ) .
@@ -237,6 +243,7 @@ class DBEdit extends \Jackbooted\Util\JB {
                 $blankLine = ( isset( $this->displayType[$colName][2] ) ) ? $this->displayType[$colName][2] : false;
                 $updCheckAttrib['default'] = $value;
                 $updCheckAttrib['hasBlank'] = $blankLine;
+                $updCheckAttrib['DB'] = $this->db;
                 $html .= Lists::select( $colName, $dispList, $updCheckAttrib );
                 break;
 

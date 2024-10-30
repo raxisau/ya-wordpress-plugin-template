@@ -3,7 +3,7 @@
 namespace Jackbooted\Util;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -273,7 +273,7 @@ class Log4PHP extends \Jackbooted\Util\JB {
             return;
         }
 
-        $errLev = error_reporting( E_ALL & ~E_DEPRECATED & ~E_STRICT );
+        $errLev = error_reporting( E_ALL | E_STRICT );
 
         // Remove extra spaces and add prefix
         $s = self::$prefix[$level] . ': ' . preg_replace( '/\s{2,}/', ' ', $s );

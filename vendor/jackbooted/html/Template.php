@@ -6,7 +6,7 @@ use \Jackbooted\Util\Log4PHP;
 
 /** template.php - Templating Engine functions
  *
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -42,6 +42,22 @@ class Template extends \Jackbooted\Util\JB {
         $this->log = Log4PHP::logFactory( __CLASS__ );
     }
 
+    public function getTokenList() {
+        $this->loadDataSource();
+        $this->trimBodyTags();
+
+        if ( preg_match_all( '/{\$([^}]+)}/m', $this->outputText, $matches, PREG_SET_ORDER, 0 ) === false ) {
+            return [];
+        }
+
+        $tokList = [];
+        foreach ( $matches as $match ) {
+            $tokList[] = $match[1];
+        }
+
+        return $tokList;
+    }
+
     public function replace( $token, $value = null ) {
         if ( is_array( $token ) ) {
             foreach ( $token as $key => $val ) {
@@ -68,7 +84,7 @@ class Template extends \Jackbooted\Util\JB {
             case self::STRING:
             default:
                 $this->outputText = $this->dataSource;
-                $this->log->debug( 'Text data source' );
+                $this->log->trace( 'Text data source' );
                 break;
         }
     }
@@ -76,10 +92,10 @@ class Template extends \Jackbooted\Util\JB {
     private function trimBodyTags() {
         if ( preg_match( "/<body[^>]*>(.*)<\/body>/siU", $this->outputText, $results ) ) {
             $this->outputText = $results[1];
-            $this->log->debug( 'trimmed off body tags' );
+            $this->log->trace( 'trimmed off body tags' );
         }
         else {
-            $this->log->debug( 'No body tags to trim' );
+            $this->log->trace( 'No body tags to trim' );
         }
 
         $this->outputText = preg_replace( '/{\*.+?\*}/ms', '', $this->outputText );
@@ -89,7 +105,7 @@ class Template extends \Jackbooted\Util\JB {
         $count = 0;
         $this->replace( 'debug_vars', '<pre>' . json_encode( array_keys( $this->debugVars ), JSON_PRETTY_PRINT ) . '</pre>' );
         $this->outputText = str_replace( array_keys( $this->tokenList ), array_values( $this->tokenList ), $this->outputText, $count );
-        $this->log->debug( "replaced {$count} tokens" );
+        $this->log->trace( "replaced {$count} tokens" );
     }
 
     public function toTxt() {
@@ -109,7 +125,7 @@ class Template extends \Jackbooted\Util\JB {
         $this->trimBodyTags();
         $this->doStraightReplacements();
 
-        return $this->outputText;
+        $fName = ( $this->type == self::FILE ) ? "<!-- " . basename( $this->dataSource ) . " -->\n" : '';
+        return $fName . $this->outputText;
     }
-
 }

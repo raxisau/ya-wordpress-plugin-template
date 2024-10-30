@@ -1,3 +1,4 @@
+#!/usr/local/bin/php
 <?php
 if ( ( $sapi = php_sapi_name() ) != 'cli' ) {
     echo "Can only run on command line: {$sapi}\n";

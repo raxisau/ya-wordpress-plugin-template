@@ -10,7 +10,13 @@ class RestAPI extends \Jackbooted\Util\JB {
         'Accept: application/json',
     ];
 
+    public static $debug=false;
+
     public static function get( $url, $headers=[], $agent=self::AGENT_BRAVE ) {
+        if ( self::$debug  && strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) === false ) {
+            echo '<pre>' . $url . "\nheaders" . json_encode( $headers, JSON_PRETTY_PRINT ) . '</pre>';
+        }
+
         $culrOpts = [
             CURLOPT_URL            => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -36,7 +42,10 @@ class RestAPI extends \Jackbooted\Util\JB {
 
     private static function send( $method, $url, $postData='', $headers=[], $agent=self::AGENT_BRAVE ) {
         if ( is_array( $postData ) ) {
-            $postData = json_encode( $postData );
+            $postData = json_encode( $postData, JSON_PRETTY_PRINT );
+        }
+        if ( self::$debug  && strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) === false ) {
+            echo "<pre>METHOD: " . $method . "\nURL: " . $url . "\n->" . $postData . "\nheaders" . json_encode( $headers, JSON_PRETTY_PRINT ) . "\n</pre>";
         }
 
         $culrOpts = [
@@ -70,6 +79,10 @@ class RestAPI extends \Jackbooted\Util\JB {
                     'url'       => $culrOpts[CURLOPT_URL],
                     'http_code' => 0,
                 ];
+            }
+
+            if ( self::$debug  && strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) === false ) {
+                echo "<pre><- " . $result . '</pre>';
             }
 
             if ( ( $httpCode = curl_getinfo( $ch, CURLINFO_HTTP_CODE ) ) != 200 ) {

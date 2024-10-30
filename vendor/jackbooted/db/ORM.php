@@ -5,7 +5,7 @@ namespace Jackbooted\DB;
 use \Jackbooted\Forms\Request;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -54,6 +54,10 @@ class ORM extends \Jackbooted\Util\JB {
     }
 
     public static function load ( $id ) {
+        if ( ! is_numeric( $id ) ) {
+            return false;
+        }
+
         $obj = static::factory( [] );
 
         if ( ( $row = $obj->dao->oneRow( $id ) ) === false ) {
@@ -72,6 +76,10 @@ class ORM extends \Jackbooted\Util\JB {
             $objList[$obj->id] = $obj;
         }
         return $objList;
+    }
+
+    public static function sqlComment( $function, $file, $line ) {
+        return '/* ' . $function . ' ' . basename( $file ) . ' ' . $line . ' */';
     }
 
     protected $data;

@@ -8,13 +8,9 @@ class Mutex extends \Jackbooted\DB\ORM {
 
     public static function init () {
         if ( self::$dao == null ) {
-            self::$dao = new MutexDAO ();
+            $daoClass = __CLASS__ . 'DAO';
+            self::$dao = new $daoClass();
         }
-    }
-
-    public static function factory ( $data=[] ) {
-        $clazz = __CLASS__;
-        return new $clazz( $data );
     }
 
     public static function load( $mutexName ) {
@@ -28,7 +24,7 @@ class Mutex extends \Jackbooted\DB\ORM {
     public static function lock( $mutexName, $timeout=10 ) {
         $uuid = '' . microtime();
         $tName = self::$dao->tableName;
-        $sql= "INSERT INTO {$tName} (fldMutexName,fldLockName) VALUES(?,?)";
+        $sql= "INSERT IGNORE INTO {$tName} (fldMutexName,fldLockName) VALUES(?,?)";
         $counter = 0;
         while ( DB::exec( self::$dao->db, $sql, [ $mutexName, $uuid ] ) != 1 ) {
             if ( $counter > $timeout ) {
@@ -76,5 +72,5 @@ SQL;
         parent::__construct();
     }
 }
-Mutex::init();
 MutexDAO::init();
+Mutex::init();

@@ -4,6 +4,9 @@ namespace App\Controllers;
 use \Jackbooted\Forms\Request;
 
 class BaseController extends \Jackbooted\Html\WebPage {
+    const COMPLETED = 'COMPLETED';
+    const EUR_SYM    = '&euro;';
+
     protected $curUser;
     protected $uid;
     protected $userEmail  = '';
@@ -43,6 +46,7 @@ class BaseController extends \Jackbooted\Html\WebPage {
 
         if ( $this->settings->debugMode() ) {
             \App\App::debug();
+            \App\Libraries\RestAPI::$debug = true;
         }
     }
 
@@ -50,8 +54,8 @@ class BaseController extends \Jackbooted\Html\WebPage {
     protected function response( $action ) {
         return \Jackbooted\Forms\Response::factory()
                                          ->action ( static::class . "->{$action}()", static::ACTION )
-                                         ->copyVarsFromRequest( '/^' . \Jackbooted\Forms\Paginator::PAGE_VAR . '.*$/' )
-                                         ->copyVarsFromRequest( '/^' . \Jackbooted\Forms\Columnator::COL_VAR . '.*$/' )
+                                         ->copyVarsFromRequest( \Jackbooted\Forms\Paginator::PAGE_VAR_REGEX )
+                                         ->copyVarsFromRequest( \Jackbooted\Forms\Columnator::COL_VAR_REGEX )
                                          ->copyVarsFromRequest( 'inject_atts' )
                                          ->copyVarsFromRequest( 'inject_content' )
                                          ->copyVarsFromRequest( 'inject_tag' )
@@ -76,7 +80,12 @@ class BaseController extends \Jackbooted\Html\WebPage {
         // This automatically puts this in the ajax URL into the tempate variables
         $data['ajaxUrl'] = admin_url( 'admin-ajax.php' );
 
-        $template = new \Jackbooted\Html\Template( $this->partialDir . '/' . $fileName, \Jackbooted\Html\Template::FILE );
+        $fileName = $this->partialDir . '/' . $fileName;
+        if ( ! file_exists( $fileName ) ) {
+            return $this->errMsg( "Template file missing: {$fileName}" );
+        }
+
+        $template = new \Jackbooted\Html\Template( $fileName, \Jackbooted\Html\Template::FILE );
         return $template->replace( $data )->toHtml();
     }
 
@@ -104,4 +113,3 @@ class BaseController extends \Jackbooted\Html\WebPage {
         return [ $action, $actSep ];
     }
 }
-

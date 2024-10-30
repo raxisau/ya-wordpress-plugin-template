@@ -20,7 +20,7 @@ use \Jackbooted\Html\Widget;
 use \Jackbooted\Security\Password;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -54,11 +54,11 @@ class FancyLogin extends Login {
     private function displayUserDetails() {
         self::$log->trace( 'Entering ' . __METHOD__ );
         $jQuery = <<<JS
-            $().ready(function() {
-                $('#hoverimage').hover( function () { $('#extralinks').fadeIn('fast'); },
-                                        function () { setTimeout("$('#extralinks').fadeOut('slow');", 3000 ); });
+            jQuery().ready(function() {
+                jQuery('#hoverimage').hover( function () { jQuery('#extralinks').fadeIn('fast'); },
+                                        function () { setTimeout("jQuery('#extralinks').fadeOut('slow');", 3000 ); });
             });
-JS;
+        JS;
 
         $resp = new Response ();
         $html = JS::library( JS::JQUERY ) .
@@ -94,15 +94,15 @@ JS;
         self::$log->trace( 'Entering ' . __METHOD__ );
         $jsUrl = Cfg::get( 'js_url' );
         $jQuery = <<<JS
-    $().ready(function() {
-        $('#hoverimage').hover ( function () { $('#extralinks').fadeIn('fast'); },
-                                 function () { setTimeout("$('#extralinks').fadeOut();", 3000 ); });
-        $('a.facebox').facebox({closeImage:   '$jsUrl/images/closelabel.png',
-                                loadingImage: '$jsUrl/images/loading.gif'
+            jQuery().ready(function() {
+                jQuery('#hoverimage').hover ( function () { jQuery('#extralinks').fadeIn('fast'); },
+                                         function () { setTimeout("jQuery('#extralinks').fadeOut();", 3000 ); });
+                jQuery('a.facebox').facebox({closeImage:   '$jsUrl/images/closelabel.png',
+                                        loadingImage: '$jsUrl/images/loading.gif'
 
-        });
-    });
-JS;
+                });
+            });
+        JS;
         $formName = 'FancyLogin_loginForm';
         $valid = Validator::factory( $formName, 'LF' )
                 ->addExists( self::LOGIN_FNAME, 'Email field must not be empty' )
@@ -272,17 +272,17 @@ JS;
             $now = time();
             if ( DB::driver() == DB::MYSQL ) {
                 $sql = <<<SQL
-INSERT INTO tblUser
-       (fldUserID,fldUser,fldFirstName,fldLastName,fldPassword,fldDomain,fldCreated,      fldLevel)
-VALUES ( ?,       ?,      ?,           ?,          PASSWORD(?),?,        $now,            ? )
-SQL;
+                    INSERT INTO tblUser
+                           (fldUserID,fldUser,fldFirstName,fldLastName,fldPassword,fldDomain,fldCreated,      fldLevel)
+                    VALUES ( ?,       ?,      ?,           ?,          PASSWORD(?),?,        $now,            ? )
+                SQL;
             }
             else {
                 $sql = <<<SQL
-INSERT INTO tblUser
-       (fldUserID,fldUser,fldFirstName,fldLastName,fldPassword,fldDomain,fldCreated,      fldLevel)
-VALUES ( ?,       ?,      ?,           ?,          ?,          ?,        $now,            ? )
-SQL;
+                    INSERT INTO tblUser
+                           (fldUserID,fldUser,fldFirstName,fldLastName,fldPassword,fldDomain,fldCreated,      fldLevel)
+                    VALUES ( ?,       ?,      ?,           ?,          ?,          ?,        $now,            ? )
+                SQL;
                 $pw = hash( 'md5', $pw );
             }
             $params = [ DBMaintenance::dbNextNumber( DB::DEF, 'tblUser' ),
@@ -308,16 +308,16 @@ SQL;
                     ->send();
 
             $body = <<<TXT
-Thanks for signing up for %s
+                Thanks for signing up for %s
 
-Here are your login details
+                Here are your login details
 
-Username: %s
-Password: %s
+                Username: %s
+                Password: %s
 
-Regards
-%s
-TXT;
+                Regards
+                %s
+            TXT;
             // create the email message to notify the new user of his/her login details
             Mailer::envelope()->from( $boss )
                     ->to( Request::get( 'fldEmail' ) )
@@ -368,15 +368,15 @@ TXT;
                     ->send();
 
             $body = <<<TXT
-Message from %s
+                Message from %s
 
-Here are your login details
+                Here are your login details
 
-Password: %s
+                Password: %s
 
-Regards
-%s
-TXT;
+                Regards
+                %s
+            TXT;
             // create the email message to notify the user of his/her login details
             Mailer::envelope()->from( $boss )
                     ->to( Request::get( 'fldEmail' ) )

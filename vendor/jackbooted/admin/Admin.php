@@ -21,7 +21,7 @@ use \Jackbooted\DB\DBMaintenance;
 use \Jackbooted\Mail\Mailer;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -32,12 +32,12 @@ use \Jackbooted\Mail\Mailer;
  */
 class Admin extends WebPage {
 
-    const USER_SQL_MYSQL = "SELECT fldUserID,CONCAT(fldFirstName, ' ',fldLastName) FROM tblUser";
+    const USER_SQL_MYSQL  = "SELECT fldUserID,CONCAT(fldFirstName, ' ',fldLastName) FROM tblUser";
     const USER_SQL_SQLITE = "SELECT fldUserID,fldFirstName || ' ' || fldLastName FROM tblUser";
-    const GROUP_SQL = 'SELECT fldGroupID,fldName FROM tblGroup';
-    const LEVEL_SQL = 'SELECT fldUserTypeValue,UPPER(fldUserTypeName) FROM tblUserType';
-    const TZ_SQL = "SELECT fldDescription,CONCAT(fldDescription,'(',fldTime,')') FROM tblTimeZone ORDER BY CAST(fldCode AS DECIMAL(5,2)),fldDescription";
-    const PRIV_SQL = 'SELECT fldSecPrivilegesID,fldName FROM tblSecPrivileges';
+    const GROUP_SQL       = 'SELECT fldGroupID,fldName FROM tblGroup';
+    const LEVEL_SQL       = 'SELECT fldUserTypeValue,UPPER(fldUserTypeName) FROM tblUserType';
+    const TZ_SQL          = "SELECT fldDescription,CONCAT(fldDescription,'(',fldTime,')') FROM tblTimeZone ORDER BY CAST(fldCode AS DECIMAL(5,2)),fldDescription";
+    const PRIV_SQL        = 'SELECT fldSecPrivilegesID,fldName FROM tblSecPrivileges';
 
     private static $completeMenu;
     private static $userMenu;
@@ -121,7 +121,7 @@ class Admin extends WebPage {
             WHERE fldUserTypeValue IN ( SELECT DISTINCT fldLevelID
                                         FROM tblSecPrivUserMap
                                         WHERE fldPrivilegeID=? )
-SQL;
+        SQL;
 
         $privs = DBTable::factory( DB::DEF, $sql, [ $key, $key, $key ], DB::FETCH_NUM )->getColumn( 0 );
         $privsList = join( ', ', $privs );
@@ -177,7 +177,7 @@ SQL;
             WHERE fldUserID IN ( SELECT fldUserID
                                  FROM tblUserGroupMap
                                  WHERE fldGroupID=? )
-SQL;
+        SQL;
         $users = DBTable::factory( DB::DEF, $sql, $key, DB::FETCH_NUM )->getColumn( 0 );
         $userList = join( ', ', $users );
         if ( $userList == '' ) {
@@ -218,13 +218,13 @@ SQL;
 
         $jsUrl = Cfg::get( 'js_url' );
         $jQuery = <<<JS
-            $().ready(function() {
-                $('a.facebox').facebox({closeImage:   '$jsUrl/images/closelabel.png',
+            jQuery().ready(function() {
+                jQuery('a.facebox').facebox({closeImage:   '$jsUrl/images/closelabel.png',
                                         loadingImage: '$jsUrl/images/loading.gif'
 
                 });
             });
-JS;
+        JS;
 
         $userSql = ( DB::driver() == DB::MYSQL ) ? self::USER_SQL_MYSQL : self::USER_SQL_SQLITE;
 
@@ -446,14 +446,14 @@ JS;
                 INSERT INTO tblUser
                        (fldUserID,fldUser,fldFirstName,fldLastName,fldPassword,fldDomain,fldCreated,      fldLevel)
                 VALUES ( ?,       ?,      ?,           ?,          PASSWORD(?),?,        $now,            ? )
-SQL;
+            SQL;
         }
         else {
             $sql = <<<SQL
                 INSERT INTO tblUser
                        (fldUserID,fldUser,fldFirstName,fldLastName,fldPassword,fldDomain,fldCreated,      fldLevel)
                 VALUES ( ?,       ?,      ?,           ?,          ?,          ?,        $now,            ? )
-SQL;
+            SQL;
             $pw = hash( 'md5', $pw );
         }
         $userID = DBMaintenance::dbNextNumber( DB::DEF, 'tblUser' );
@@ -481,16 +481,16 @@ SQL;
               ->send();
 
         $body = <<<TXT
-Thanks for signing up for %s
+            Thanks for signing up for %s
 
-Here are your login details
+            Here are your login details
 
-Username: %s
-Password: %s
+            Username: %s
+            Password: %s
 
-Regards
-%s
-TXT;
+            Regards
+            %s
+        TXT;
         // create the email message to notify the new user of his/her login details
         Mailer::envelope()
               ->from( $boss )
@@ -597,5 +597,4 @@ TXT;
                     $this->editAccount();
         }
     }
-
 }

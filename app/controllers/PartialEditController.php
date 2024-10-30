@@ -6,11 +6,13 @@ use \Jackbooted\Html\Lists;
 use \Jackbooted\Forms\Request;
 
 class PartialEditController extends BaseController {
-    const DEF    = '\App\Controllers\PartialEditController->index()';
-    const ACTION = '_PE_ACT';
+    const DEF       = '\App\Controllers\PartialEditController->index()';
+    const ACTION    = '_PE_ACT';
+    const SHORTCODE = 'yawpt-partials';
 
     public function __construct () {
         parent::__construct();
+        $this->domainLead  = $this->getLeadDomain();
     }
 
     public function index() {
@@ -60,8 +62,12 @@ class PartialEditController extends BaseController {
 
         $partialFile = Request::get( 'fldPartial' );
         $contents = htmlentities( $this->template( [], $partialFile ) );
+
         $respSave = $this->response( 'savePartial' );
         $respSave->set( 'fldPartial', $partialFile );
+
+        $respCancel = $this->response( 'index' );
+        $respCancel->set( 'fldPartial', $partialFile );
 
         $html = Tag::form( [ 'action' => $action ] ) .
                      $respSave->toHidden() .
@@ -81,7 +87,7 @@ class PartialEditController extends BaseController {
                        Tag::tr() .
                          Tag::td([ 'align' => 'center', 'colspan' => 3 ]) .
                            Tag::submit( 'Save', 'Save', ['class' => 'button primary btn btn-primary' ] ) .
-                           Tag::hRef( $action, 'Cancel', [ 'class' => 'button secondary btn btn-secondary' ] ) .
+                           Tag::hRef( $action . $actSep . $respCancel->toURL(), 'Cancel', [ 'class' => 'button secondary btn btn-secondary' ] ) .
                          Tag::_td() .
                        Tag::_tr() .
                      Tag::_table() .
@@ -108,7 +114,7 @@ class PartialEditController extends BaseController {
         if ( preg_match( "/<\/body>.*$/sim", $origFileContents, $matches ) ) {
             $footer = $matches[0];
         }
-        
+
         file_put_contents( $fileName, $header . $partialCode . $footer );
 
         return $this->okMsg( "Sucessfully saved Partial: {$partialFile}" ) .
@@ -117,13 +123,18 @@ class PartialEditController extends BaseController {
 
     private function getPartialList() {
         $handle = opendir( $this->partialDir );
-        $partialList = [ 'ErrMsg.php' ];
+        $partialList = [ ];
         while ( false !== ( $file = readdir( $handle ) ) ) {
-            if ( strpos( $file, '.html' ) !== false ) {
-                $partialList[] = $file;
+            if ( $file == 'DomainHelpTemplate.html' ||
+                 $file == 'OZRegistryTemplate.html' ||
+                 strpos( $file, '.html' ) === false ) {
+                continue;
             }
+            $partialList[] = $file;
         }
         closedir( $handle );
+        $partialList[] = 'ErrMsg.php';
+        sort( $partialList, SORT_FLAG_CASE );
         return $partialList;
     }
 }

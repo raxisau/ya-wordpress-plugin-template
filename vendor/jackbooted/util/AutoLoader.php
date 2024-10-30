@@ -3,7 +3,7 @@
 namespace Jackbooted\Util;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -106,7 +106,7 @@ class AutoLoader extends \Jackbooted\Util\JB {
             }
         }
         else {
-            self::$log->error( "Skipping {$className} because it is not in pregmatch" );
+            self::$log->trace( "Skipping {$className} because it is not in pregmatch" );
         }
     }
 

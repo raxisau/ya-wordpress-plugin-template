@@ -17,7 +17,7 @@ use \Jackbooted\Util\Log4PHP;
 use \Jackbooted\Util\StringUtil;
 
 /**
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -32,17 +32,17 @@ use \Jackbooted\Util\StringUtil;
  */
 class CRUD extends \Jackbooted\Util\JB {
 
-    const TABLE_C = 'TABLE_CLASS';
-    const SUFFIX = '_C';
-    const ACTION = '_CA';
-    const DISPLAY = 'DISPLAY';
-    const HIDDEN = 'HIDDEN';
-    const NONE = 'NONE';
-    const SELECT = 'SELECT';
-    const RADIO = 'RADIO';
-    const ENCTEXT = 'ENCTEXT';
-    const TEXT = 'TEXT';
-    const CHECKBOX = 'CHECKBOX';
+    const TABLE_C   = 'TABLE_CLASS';
+    const SUFFIX    = '_C';
+    const ACTION    = '_CA';
+    const DISPLAY   = 'DISPLAY';
+    const HIDDEN    = 'HIDDEN';
+    const NONE      = 'NONE';
+    const SELECT    = 'SELECT';
+    const RADIO     = 'RADIO';
+    const ENCTEXT   = 'ENCTEXT';
+    const TEXT      = 'TEXT';
+    const CHECKBOX  = 'CHECKBOX';
     const TIMESTAMP = 'TIMESTAMP';
 
     private static $headerDisplayed = false;
@@ -86,37 +86,37 @@ class CRUD extends \Jackbooted\Util\JB {
         }
         self::$headerDisplayed = true;
         $js = <<<JS
-    var pageDirty = false;
-    function toggleAll ( box, checkBoxTag, submitId ) {
-        $("input[id^='" + checkBoxTag + "_']").attr ( 'checked', $(box).is(':checked') );
-        showSubmit ( submitId );
-    }
-    function autoUpdate ( rowIdx, updTag, delTag, submitId ) {
-        pageDirty = true;
-        $('#' + updTag + '_' + rowIdx).attr('checked',true);
-        $('#' + delTag + '_' + rowIdx).attr('checked',false);
-        showSubmit ( submitId );
-    }
-    function showSubmit ( buttonId ) {
-        $('#' + buttonId).fadeIn();
-    }
-    function checkIfADelete ( delTag ) {
-        var numOfDeletes = 0;
-        $("input[id^='" + delTag + "_']").each ( function () {
-            if ( $(this).attr ( 'checked' ) ) numOfDeletes ++;
-        });
-        var plural = ( numOfDeletes == 1 ) ? '' : 's';
-        var proceed = ( numOfDeletes > 0 ) ? confirm ( 'Process Row Delete' + plural + '?' ) : true;
-        if ( proceed ) pageDirty = false;
-        return proceed;
-    }
-    $().ready(function() {
-        window.onbeforeunload = function () {
-            if ( ! pageDirty ) return;
-            return 'Changes have been made on this page and will not be saved.'
-        };
-    });
-JS;
+            var pageDirty = false;
+            function toggleAll ( box, checkBoxTag, submitId ) {
+                jQuery("input[id^='" + checkBoxTag + "_']").attr ( 'checked', jQuery(box).is(':checked') );
+                showSubmit ( submitId );
+            }
+            function autoUpdate ( rowIdx, updTag, delTag, submitId ) {
+                pageDirty = true;
+                jQuery('#' + updTag + '_' + rowIdx).attr('checked',true);
+                jQuery('#' + delTag + '_' + rowIdx).attr('checked',false);
+                showSubmit ( submitId );
+            }
+            function showSubmit ( buttonId ) {
+                jQuery('#' + buttonId).fadeIn();
+            }
+            function checkIfADelete ( delTag ) {
+                var numOfDeletes = 0;
+                jQuery("input[id^='" + delTag + "_']").each ( function () {
+                    if ( jQuery(this).attr ( 'checked' ) ) numOfDeletes ++;
+                });
+                var plural = ( numOfDeletes == 1 ) ? '' : 's';
+                var proceed = ( numOfDeletes > 0 ) ? confirm ( 'Process Row Delete' + plural + '?' ) : true;
+                if ( proceed ) pageDirty = false;
+                return proceed;
+            }
+            jQuery().ready(function() {
+                window.onbeforeunload = function () {
+                    if ( ! pageDirty ) return;
+                    return 'Changes have been made on this page and will not be saved.'
+                };
+            });
+        JS;
         return JS::library( JS::JQUERY ) .
                 JS::javaScript( $js );
     }
@@ -168,26 +168,26 @@ JS;
         parent::__construct();
         $this->log = Log4PHP::logFactory( __CLASS__ );
 
-        $this->tableName = $tableName;
-        $this->primaryKey = ( isset( $extraArgs['primaryKey'] ) ) ? $extraArgs['primaryKey'] : null;
-        $this->db = ( isset( $extraArgs['db'] ) ) ? $extraArgs['db'] : DB::DEF;
-        $this->where = ( isset( $extraArgs['where'] ) ) ? $extraArgs['where'] : [];
-        $this->extraCols = ( isset( $extraArgs['userCols'] ) ) ? $extraArgs['userCols'] : [];
-        $this->canDelete = ( isset( $extraArgs['canDelete'] ) ) ? $extraArgs['canDelete'] : true;
-        $this->canUpdate = ( isset( $extraArgs['canUpdate'] ) ) ? $extraArgs['canUpdate'] : true;
-        $this->canInsert = ( isset( $extraArgs['canInsert'] ) ) ? $extraArgs['canInsert'] : true;
-        $this->topPage = ( isset( $extraArgs['topPager'] ) ) ? $extraArgs['topPager'] : true;
-        $this->bottomPage = ( isset( $extraArgs['bottomPager'] ) ) ? $extraArgs['bottomPager'] : true;
-        $this->suffix = ( isset( $extraArgs['suffix'] ) ) ? $extraArgs['suffix'] : '_' . Invocation::next();
-        $this->formAction = ( isset( $extraArgs['formAction'] ) ) ? $extraArgs['formAction'] : '?';
-        $this->insDefaults = ( isset( $extraArgs['insDefaults'] ) ) ? $extraArgs['insDefaults'] : [];
-        $this->nullsEmpty = ( isset( $extraArgs['nullsEmpty'] ) ) ? $extraArgs['nullsEmpty'] : false;
-        $this->dbType = ( isset( $extraArgs['dbType'] ) ) ? $extraArgs['dbType'] : DB::driver( $this->db );
+        $this->tableName   = $tableName;
+        $this->primaryKey  = $extraArgs['primaryKey']  ?? null;
+        $this->db          = $extraArgs['db']          ?? DB::DEF;
+        $this->where       = $extraArgs['where']       ?? [];
+        $this->extraCols   = $extraArgs['userCols']    ?? [];
+        $this->canDelete   = $extraArgs['canDelete']   ?? true;
+        $this->canUpdate   = $extraArgs['canUpdate']   ?? true;
+        $this->canInsert   = $extraArgs['canInsert']   ?? true;
+        $this->topPage     = $extraArgs['topPager']    ?? true;
+        $this->bottomPage  = $extraArgs['bottomPager'] ?? true;
+        $this->suffix      = $extraArgs['suffix']      ?? '_' . Invocation::next();
+        $this->formAction  = $extraArgs['formAction']  ?? '?';
+        $this->insDefaults = $extraArgs['insDefaults'] ?? [];
+        $this->nullsEmpty  = $extraArgs['nullsEmpty']  ?? false;
+        $this->dbType      = $extraArgs['dbType']      ?? DB::driver( $this->db );
 
-        $this->action = self::ACTION . $this->suffix;
-        $this->delTag = 'D' . $this->suffix;
-        $this->updTag = 'U' . $this->suffix;
-        $this->gridTag = 'G' . $this->suffix;
+        $this->action   = self::ACTION . $this->suffix;
+        $this->delTag   = 'D' . $this->suffix;
+        $this->updTag   = 'U' . $this->suffix;
+        $this->gridTag  = 'G' . $this->suffix;
         $this->submitId = 'S' . $this->suffix;
 
         $pageProps = [ 'suffix' => self::SUFFIX ];
@@ -234,31 +234,28 @@ JS;
 
         $paginationHtml = $this->paginator->toHtml();
 
-        $html .= Tag::form( [ 'action' => $this->formAction,
-                    'onSubmit' => "if (!checkIfADelete('{$this->delTag}')) return false; return true;" ] ) .
-                Tag::table( array_merge( [ 'id' => 'CRUD' . $this->suffix ], $this->styles[self::TABLE_C] ) ) .
-                Tag::tr();
+        $html .= Tag::form( [ 'action' => $this->formAction, 'onSubmit' => "if (!checkIfADelete('{$this->delTag}')) return false; return true;" ] ) .
+                   Tag::table( array_merge( [ 'id' => 'CRUD' . $this->suffix ], $this->styles[self::TABLE_C] ) ) .
+                     Tag::tr();
         if ( $this->canDelete ) {
-            $js = "$().ready(function() { $('input[type=checkbox][name^={$this->delTag}]').shiftClick(); });";
+            $js = "jQuery().ready(function() { jQuery('input[type=checkbox][name^={$this->delTag}]').shiftClick(); });";
             $html .= JS::library( 'jquery.shiftclick.js' ) .
-                    JS::javaScript( $js ) .
-                    Tag::th() .
-                    Tag::hTag( 'span', [ 'title' => 'Click here to Toggle all the Delete checkboxes' ] ) . 'D' . Tag::_hTag( 'span' ) .
-                    Tag::br() .
-                    Tag::checkBox( '_dcheck', 'Y', false, [ 'onClick' => "toggleAll(this,'{$this->delTag}','{$this->submitId}')",
-                        'title' => 'Toggle all the Delete checkboxes.' ] ) .
-                    Tag::_th();
+                     JS::javaScript( $js ) .
+                     Tag::th() .
+                       Tag::hTag( 'span', [ 'title' => 'Click here to Toggle all the Delete checkboxes' ] ) . 'D' . Tag::_hTag( 'span' ) .
+                       Tag::br() .
+                       Tag::checkBox( '_dcheck', 'Y', false, [ 'onClick' => "toggleAll(this,'{$this->delTag}','{$this->submitId}')", 'title' => 'Toggle all the Delete checkboxes.' ] ) .
+                     Tag::_th();
         }
         if ( $this->canUpdate ) {
-            $js = "$().ready(function() { $('input[type=checkbox][name^={$this->updTag}]').shiftClick(); });";
+            $js = "jQuery().ready(function() { jQuery('input[type=checkbox][name^={$this->updTag}]').shiftClick(); });";
             $html .= JS::library( 'jquery.shiftclick.js' ) .
-                    JS::javaScript( $js ) .
-                    Tag::th() .
-                    Tag::hTag( 'span', [ 'title' => 'Click here to Toggle all the Update checkboxes' ] ) . 'U' . Tag::_hTag( 'span' ) .
-                    Tag::br() .
-                    Tag::checkBox( '_ucheck', 'Y', false, [ 'onClick' => "toggleAll(this,'{$this->updTag}','{$this->submitId}')",
-                        'title' => 'Toggle all the Update checkboxes.' ] ) .
-                    Tag::_th();
+                     JS::javaScript( $js ) .
+                     Tag::th() .
+                       Tag::hTag( 'span', [ 'title' => 'Click here to Toggle all the Update checkboxes' ] ) . 'U' . Tag::_hTag( 'span' ) .
+                       Tag::br() .
+                       Tag::checkBox( '_ucheck', 'Y', false, [ 'onClick' => "toggleAll(this,'{$this->updTag}','{$this->submitId}')", 'title' => 'Toggle all the Update checkboxes.' ] ) .
+                     Tag::_th();
         }
         foreach ( $this->columnTitles as $colName => $title ) {
             if ( isset( $this->displayType[$colName] ) ) {
@@ -299,25 +296,21 @@ JS;
             $html .= Tag::tr();
             if ( $this->canDelete ) {
                 $html .= Tag::td( [ 'align' => 'center' ] ) .
-                        Tag::checkBox( "{$this->delTag}[$idx]", $row[$this->primaryKey], false, [ 'id' => "{$this->delTag}_$idx",
-                            'onClick' => "showSubmit('{$this->submitId}')",
-                            'title' => 'Toggle to delete this row.' ] ) .
-                        Tag::_td();
+                           Tag::checkBox( "{$this->delTag}[$idx]", $row[$this->primaryKey], false, [ 'id' => "{$this->delTag}_$idx",'onClick' => "showSubmit('{$this->submitId}')",'title' => 'Toggle to delete this row.' ] ) .
+                         Tag::_td();
             }
             if ( $this->canUpdate ) {
                 $html .= Tag::td( [ 'align' => 'center' ] ) .
-                        Tag::checkBox( "{$this->updTag}[$idx]", $row[$this->primaryKey], false, [ 'id' => "{$this->updTag}_$idx",
-                            'onClick' => "showSubmit('{$this->submitId}')",
-                            'title' => 'Toggle to update this row.' ] ) .
-                        Tag::_td();
+                           Tag::checkBox( "{$this->updTag}[$idx]", $row[$this->primaryKey], false, [ 'id' => "{$this->updTag}_$idx",'onClick' => "showSubmit('{$this->submitId}')",'title' => 'Toggle to update this row.' ] ) .
+                         Tag::_td();
             }
             foreach ( $row as $key => $value ) {
                 $html .= $this->renderValue( $idx, $key, $value );
             }
             foreach ( $this->extraCols as $col ) {
                 $html .= Tag::td() .
-                        call_user_func_array( $col, [ $idx, $row[$this->primaryKey] ] ) .
-                        Tag::_td();
+                           call_user_func_array( $col, [ $idx, $row[$this->primaryKey] ] ) .
+                         Tag::_td();
             }
             $html .= Tag::_tr() . "\n";
         }
@@ -325,13 +318,11 @@ JS;
         $this->resp->set( $this->action, 'applyChanges' );
 
         $html .= Tag::_table() .
-                $this->resp->toHidden() .
-                Tag::submit( 'Apply Changes', [ 'style' => 'display: none',
-                    'id' => $this->submitId,
-                    'title' => 'Click here to apply the changes to this table' ] ) .
-                Tag::_form();
+                   $this->resp->toHidden() .
+                   Tag::submit( 'Apply Changes', [ 'style' => 'display: none', 'id' => $this->submitId, 'title' => 'Click here to apply the changes to this table' ] ) .
+                 Tag::_form();
 
-        return self::header() .
+        return  self::header() .
                 Widget::styleTable( '#CRUD' . $this->suffix ) .
                 ( ( $this->topPage ) ? $paginationHtml : '' ) .
                 $html .
@@ -443,15 +434,14 @@ JS;
         $insertedCnt = 0;
         for ( $i = 0; $i < $rowsToInsert; $i++ ) {
             $params = array_merge( $this->insDefaults, $this->where );
-            $paramValues = null;
-
             if ( Cfg::get( 'jb_db', false )  && $this->db == DB::DEF ) {
                 $params[$this->primaryKey] = DBMaintenance::dbNextNumber( $this->db, $this->tableName );
             }
-            $sql = 'INSERT INTO ' . $this->tableName;
-            if ( count( $params ) > 0 ) {
-                $sql .= ' (' . join( ',', array_keys( $params ) ) . ') VALUES (' . DB::in( array_values( $params ), $paramValues ) . ')';
-            }
+
+            $paramValues = null;
+            $cols = join( ',', array_keys( $params ) );
+            $vals = DB::in( array_values( $params ), $paramValues );
+            $sql  = "INSERT INTO {$this->tableName} ({$cols}) VALUES ({$vals})";
 
             $insertedCnt += $this->exec( $sql, $paramValues );
         }
@@ -459,7 +449,7 @@ JS;
         if ( $insertedCnt > 0 ) {
             $this->paginator->setRows( $this->getRowCount() );
         }
-        return 'Inserted ' . $insertedCnt . ' row' . StringUtil::plural( $insertedCnt ) . Tag::br();
+        return StringUtil::unitsFormat( $insertedCnt, 'row', 'Inserted' ) . Tag::br();
     }
 
     private function renderValue( $rowIdx, $colName, $value ) {
@@ -486,7 +476,7 @@ JS;
                 break;
 
             case self::RADIO:
-                $dispList = ( isset( $this->displayType[$colName][1] ) ) ? $this->displayType[$colName][1] : null;
+                $dispList = $this->displayType[$colName][1] ?? null;
                 $updCheckAttrib['default'] = $value;
                 $html .= Tag::table() .
                         Tag::tr() .
@@ -498,15 +488,15 @@ JS;
                 break;
 
             case self::SELECT:
-                $dispList = ( isset( $this->displayType[$colName][1] ) ) ? $this->displayType[$colName][1] : null;
-                $blankLine = ( isset( $this->displayType[$colName][2] ) ) ? $this->displayType[$colName][2] : false;
+                $dispList  = $this->displayType[$colName][1] ?? null;
+                $blankLine = $this->displayType[$colName][2] ?? false;
                 $updCheckAttrib['default'] = $value;
                 $updCheckAttrib['hasBlank'] = $blankLine;
                 $html .= Lists::select( $name, $dispList, $updCheckAttrib );
                 break;
 
             case self::CHECKBOX:
-                $checkValue = ( isset( $this->displayType[$colName][1] ) ) ? $this->displayType[$colName][1] : 'YES';
+                $checkValue = $this->displayType[$colName][1] ?? 'YES';
                 $html .= Tag::checkBox( $name, $checkValue, $value == $checkValue, $updClickAttrib );
                 break;
 
@@ -564,21 +554,21 @@ JS;
         $this->resp->set( $this->action, 'insertRows' );
 
         $html = Tag::form( [ 'action' => $this->formAction ] ) .
-                Tag::text( 'rows', [ 'value' => '1', 'size' => '3' ] ) .
-                $this->resp->toHidden() .
-                Tag::submit( 'Insert' ) .
+                  Tag::text( 'rows', [ 'value' => '1', 'size' => '3' ] ) .
+                  $this->resp->toHidden() .
+                  Tag::submit( 'Insert' ) .
                 Tag::_form();
         return $html;
     }
 
-    public function columnAttrib( $col, $attrib = [] ) {
+    public function columnAttrib( $col, $attrib=[] ) {
         foreach ( $attrib as $key => $val ) {
             $this->cellAttributes[$col][$key] = $val;
         }
         return $this;
     }
 
-    public function style( $type, $attribs = null ) {
+    public function style( $type, $attribs=null ) {
         if ( $attribs === null ) {
             unset( $this->styles[$type] );
         }
@@ -679,7 +669,7 @@ JS;
         return false;
     }
 
-    protected function createSQLResult() {
+    protected function createSQLResult( $params=null ) {
         $qry = $this->paginator->getLimits( $this->dbType, 'SELECT * FROM ' . $this->tableName . ' ' .
                 $this->createSQLWhere( $params ) .
                 $this->columnator->getSort() );
@@ -788,12 +778,12 @@ JS;
         return $title;
     }
 
-    protected function getRowCount() {
+    protected function getRowCount( $params=null ) {
         $qry = 'SELECT count(' . $this->primaryKey . ') FROM ' . $this->tableName . ' ' . $this->createSQLWhere( $params );
         return DB::oneValue( $this->db, $qry, $params );
     }
 
-    protected function query( $qry, $params = null ) {
+    protected function query( $qry, $params=null ) {
         //echo '<pre>query: ' . $qry . "\n";
         //print_r ( $params );
         //echo '</pre>';
@@ -802,7 +792,7 @@ JS;
 
     protected function exec( $qry, $params = null ) {
         //echo '<pre>' . $qry . "\n";
-        //print_r ( $params );
+        //echo json_encode( $params ) . "\n";
         //echo '</pre>';
         return DB::exec( $this->db, $qry, $params );
     }

@@ -4,8 +4,9 @@ namespace App\Controllers;
 use \Jackbooted\Html\Tag;
 
 class GeoIPController extends BaseController {
-    const DEF    = '\App\Controllers\GeoIPController->index()';
-    const ACTION = '_GI_ACT';
+    const DEF       = '\App\Controllers\GeoIPController->index()';
+    const ACTION    = '_GI_ACT';
+    const SHORTCODE = 'yawpt-geoip';
 
     public function __construct () {
         parent::__construct();

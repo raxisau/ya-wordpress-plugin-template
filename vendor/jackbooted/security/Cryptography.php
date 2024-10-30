@@ -10,7 +10,7 @@ use \Defuse\Crypto\Key;
 use \Defuse\Crypto\Crypto;
 
 /*
- * @copyright Confidential and copyright (c) 2023 Jackbooted Software. All rights reserved.
+ * @copyright Confidential and copyright (c) 2024 Jackbooted Software. All rights reserved.
  *
  * Written by Brett Dutton of Jackbooted Software
  * brett at brettdutton dot com
@@ -22,7 +22,7 @@ use \Defuse\Crypto\Crypto;
 
 class Cryptography extends \Jackbooted\Util\JB {
 
-    const RAND_KEY = 'ot85bbuAgT1BOwZA6q2mAkxrpFC7gBEJM2y9z8ko';
+    const RAND_KEY = '4n5d73rde315E486pe9t7oy2nirefcPKnie0y126';
     const META = ':e:';
     const META_LEN = 3;
     const DMETA = ':d:';

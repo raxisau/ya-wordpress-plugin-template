@@ -9,11 +9,16 @@ class App extends \Jackbooted\Util\Module {
 
     public static function init() {
         global $wpdb;
-        self::$dbPrefix = $wpdb->prefix . 'jack_';
+        if ( is_object( $wpdb ) ) {
+            self::$dbPrefix = $wpdb->prefix . 'jack_';
+        }
+        else {
+            self::$dbPrefix = 'wp_jack_';
+        }
     }
 
     public static function getIP() {
-        $ipAddress = ( isset( $_SERVER['REMOTE_ADDR'] ) ) ? $_SERVER['REMOTE_ADDR'] : 'localhost';
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'localhost';
         if ( array_key_exists( 'HTTP_X_FORWARDED_FOR', $_SERVER ) ) {
             $ipAddress = array_pop( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
         }

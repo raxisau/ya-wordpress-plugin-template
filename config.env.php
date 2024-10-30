@@ -6,7 +6,7 @@ $config['LF']           = "\r\n";
 
 $config['site_path']    = __DIR__;
 $config['tmp_path']     = $config['site_path'] . '/_private';
-$config['class_path']   = [ 
+$config['class_path']   = [
     $config['site_path'] . '/vendor',
     $config['site_path'] . '/app',
     $config['site_path'] . '/partials',
@@ -47,7 +47,7 @@ $config['known']             = [ 'plugin']; //TamperGuard Variables. Variables t
 $config['exempt']            = [ 'admin.php', 'plugins.php', 'ajax.php', 'cron.php', 'router.php', 'menu.php' ]; // List of files that are not checked
 $config['crypto_location']   = 'config';   // If this is 'session' then it will look to the session variables, otherwise use the crypto_key
 $config['crypto_key']        = 'xybqOIo1g1tHt0GHXS5mraNBt68gf6T7vdmTR8rE'; // This key is shuffled around and put into the session
-                                
+
 $config['modules'] = [ '\App\App' ];
 $config['build_version'] = 'JackBooted Framework 2.1.1 (built: 2022-08-25 17:00:00)';
 $config['tinymce_api'] = 'no-api-key';

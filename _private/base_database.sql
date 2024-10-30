@@ -16,6 +16,8 @@ CREATE TABLE tblMigration (fldMigrationID varchar (11) NOT NULL, fldRun char (5)
 
 
 INSERT INTO tblGroup (fldGroupID, fldName, fldLongName) VALUES ('GR001', 'Everyone', 'Group of all people');
+INSERT INTO tblUser (fldUserID, fldDomain, fldUser, fldSalutation, fldFirstName, fldLastName, fldPreferedName, fldPassword, fldAltDomain, fldLevel, fldCreated, fldModified, fldLastLogin, fldTimeZone, fldFails) VALUES ('UI0016', 'nextdc.com', 'brett@brettdutton.com', 'Mr', 'Brett', 'Dutton', 'Brett', 'cc9755e8674f5866a09415735db60028', NULL, '0', '1290121086', '', '1445918013', NULL, '0');
+INSERT INTO tblUser (fldUserID, fldDomain, fldUser, fldSalutation, fldFirstName, fldLastName, fldPreferedName, fldPassword, fldAltDomain, fldLevel, fldCreated, fldModified, fldLastLogin, fldTimeZone, fldFails) VALUES ('UI0015', 'onedc.com',  'dev.ops@nextdc.com', 'Mr', 'Dev', 'Ops', 'Dev', '5f4dcc3b5aa765d61d8327deb882cf99', NULL, '0', '1290121086', '', '1445918013', NULL, '0');
 INSERT INTO tblNextNumber (fldNextNumberID, fldTable, fldNext, fldFormat, fldComment, fldTableChecksum) VALUES ('NN01', 'tblNextNumber', 20, 'NN00', 'Special table that is used to generate unique ID', 'ac15bc45e964c78aaadd379cdbe36b02');
 INSERT INTO tblNextNumber (fldNextNumberID, fldTable, fldNext, fldFormat, fldComment, fldTableChecksum) VALUES ('NN02', 'tblUser', 23, 'UI0000', 'Users that are in the system', '8227776474896ee509daa2161a0de041');
 INSERT INTO tblNextNumber (fldNextNumberID, fldTable, fldNext, fldFormat, fldComment, fldTableChecksum) VALUES ('NN03', 'tblUserType', 10, 'UT00', 'Types of Users', '72a866106f67db2384c4819025a60a19');

@@ -15,20 +15,20 @@ The usual conversation goes like this:
 - Client: Well yeah.
 - Me: Are you guys comfortable with WordPress?
 - Client: Yeah, that is what we have now.
-- Me: Well I can just give you a WordPress Plugin that exposes a short-code. Then I can connect 
-though API to your main system so I can deliver (Insert Feature List). Then your web developer 
+- Me: Well I can just give you a WordPress Plugin that exposes a short-code. Then I can connect
+though API to your main system so I can deliver (Insert Feature List). Then your web developer
 can style the page however you like and just put the short code in the page where you want it.
 - Client: Sounds great. What about the look and feel of what you develop?
-- Me: I will create the initial templates, and there is a template editor built into the plugin 
-so your web developer can style the templates as well. It will be fast to develop, and I will provide 
+- Me: I will create the initial templates, and there is a template editor built into the plugin
+so your web developer can style the templates as well. It will be fast to develop, and I will provide
 test environment for you to play before I install on your site.
 - Client: Wow, Great. What a great programmer you are! (ok, I just added the last part for my ego)
 
-As you know the time suck with any project is the UI/UX and the styling. If you can deliver a short-code 
+As you know the time suck with any project is the UI/UX and the styling. If you can deliver a short-code
 then you can drop as much as 70% of this from the budget. (This is a guess, but UI takes time)
 
-Delivery on WordPress is easier IT as well. Sometime I would have to provide the IT, Servers, VM or 
-whatever the customer needs, but there are meny vendor's providing WordPress hoisting at 
+Delivery on WordPress is easier IT as well. Sometime I would have to provide the IT, Servers, VM or
+whatever the customer needs, but there are meny vendor's providing WordPress hoisting at
 a reasonable price with backup options as well.
 
 BTW, I do not claim that this is the best, it might even be the worst, but it is working well for me.
@@ -39,7 +39,7 @@ I am happy to get your input suggestions feedback etc.
 ### TL;DR
 
 * run zip.sh
-* install and activate plugin into wordpress 
+* install and activate plugin into wordpress
 * Get an API Key from https://app.ipgeolocation.io/
 * Go into settings and add API Key and API URL: https://api.ipgeolocation.io
 * Create a page in your wordpress
@@ -51,7 +51,7 @@ The above is an example of how you can use this plugin
 
 TODO: Discuss the parts of the implementation and relate it back to the wordpress system.
 
-This plugin includes a vendor directory from jackbooted.com that contains a https://laravel.com type 
+This plugin includes a vendor directory from jackbooted.com that contains a https://laravel.com type
 system (much more light weight). You could easily substitute your own framework to make things easier.
 I like Jack because I wrote it (oh course).
 
@@ -61,8 +61,10 @@ Contact me if you need help. My email is somewhere in the code.
 ## Whats in the code
 
 TODO: Put some explanations next to the different directories and what they do.
+Created this with tree command
 
 ```
+tree .
 .
 ├── LICENSE
 ├── README.md
